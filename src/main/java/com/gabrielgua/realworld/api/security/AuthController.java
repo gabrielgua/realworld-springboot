@@ -21,7 +21,6 @@ public class AuthController {
     private final AuthService authService;
     private final UserAssembler userAssembler;
 
-
     @PostMapping
     public ResponseEntity<UserResponse> register(@RequestBody UserRegister register) {
         var user = userAssembler.toEntity(register);

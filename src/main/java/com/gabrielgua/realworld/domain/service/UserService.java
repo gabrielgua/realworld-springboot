@@ -14,6 +14,7 @@ public class UserService {
 
     private final UserRepository repository;
     private final PasswordEncoder encoder;
+    private final ProfileService profileService;
 
     private final String DEFAULT_IMAGE_URL = "https://api.realworld.io/images/smiley-cyrus.jpeg";
 
@@ -29,7 +30,11 @@ public class UserService {
             user.setImage(DEFAULT_IMAGE_URL);
         }
 
-        return repository.save(user);
+
+        var savedUser = repository.save(user);
+        profileService.save(user);
+        return savedUser;
+
     }
 
     @Transactional

@@ -1,6 +1,7 @@
 set foreign_key_checks = 0;
 
 delete from users;
+delete from profiles;
 
 set foreign_key_checks = 1;
 

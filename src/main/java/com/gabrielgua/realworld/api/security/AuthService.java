@@ -1,5 +1,6 @@
 package com.gabrielgua.realworld.api.security;
 
+import com.gabrielgua.realworld.api.assembler.UserAssembler;
 import com.gabrielgua.realworld.api.model.UserAuthenticate;
 import com.gabrielgua.realworld.api.model.UserResponse;
 import com.gabrielgua.realworld.api.model.UserToken;
@@ -19,12 +20,13 @@ public class AuthService {
 
     private final UserService userService;
     private final TokenService tokenService;
+    private final UserAssembler userAssembler;
     private final AuthenticationManager authenticationManager;
 
     public UserResponse register(User user) {
         var token = tokenService.generateToken(setDefaultClaims(user), user.getEmail());
         userService.setToken(user, token);
-        return userToUserResponse(token, user);
+        return toUserResponse(user);
     }
 
     public UserResponse authenticate(UserAuthenticate authenticate) {
@@ -36,18 +38,11 @@ public class AuthService {
         var token = tokenService.generateToken(setDefaultClaims(user), user.getEmail());
 
         userService.setToken(user, token);
-        return userToUserResponse(token, user);
+        return toUserResponse(user);
     }
 
-    private UserResponse userToUserResponse(String token, User user) {
-        return UserResponse
-                .builder()
-                .bio(user.getBio())
-                .email(user.getEmail())
-                .image(user.getImage())
-                .token(token)
-                .username(user.getUsername())
-                .build();
+    private UserResponse toUserResponse(User user) {
+        return userAssembler.toResponse(user);
     }
 
     private Map<String, Object> setDefaultClaims(User user) {

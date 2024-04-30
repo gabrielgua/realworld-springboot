@@ -36,8 +36,8 @@ public class TokenService {
 
         return Jwts
                 .builder()
-                .setSubject(subject)
                 .setClaims(extraClaims)
+                .setSubject(subject)
                 .setIssuer("gabrielgua-realworld")
                 .setIssuedAt(new Date(nowMillis))
                 .setExpiration(new Date(nowMillis + properties.getToken().getExpiration()))
@@ -67,12 +67,16 @@ public class TokenService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts
+                    .parserBuilder()
+                    .setSigningKey(getKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException ex) {
+            throw new RuntimeException("Token invalid");
+        }
     }
 
     private Key getKey() {

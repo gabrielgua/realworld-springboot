@@ -1,19 +1,29 @@
 package com.gabrielgua.realworld.domain.model;
 
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
-//@Data
-//@Entity
-//@Table(name = "profiles")
-//@Embeddable
-//public class Profile {
-//
-//    private String username;
-//    private String bio;
-//    private String image;
-//    private boolean following;
-//}
+@Entity
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
+@Table(name = "profiles")
+public class Profile {
+
+    @Id
+    @Column(name = "user_id")
+    @EqualsAndHashCode.Include
+    private Long id;
+
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private String username;
+    private String bio;
+    private String image;
+}
