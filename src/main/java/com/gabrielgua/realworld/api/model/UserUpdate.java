@@ -21,5 +21,11 @@ public class UserUpdate {
     private String bio;
 
     @Nullable
+    private String username;
+
+    @Nullable
+    private String password;
+
+    @Nullable
     private String image;
 }

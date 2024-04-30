@@ -21,7 +21,7 @@ public class ProfileService {
 
     @Transactional
     public void save(User user) {
-        var profile = repository.findByUsername(user.getUsername());
+        var profile = repository.findById(user.getId());
 
         if (profile.isEmpty()) {
             var newProfile = Profile

@@ -37,6 +37,14 @@ public class UserAssembler {
             update.setEmail(user.getEmail());
         }
 
+        if (update.getUsername() == null) {
+            update.setUsername(user.getUsername());
+        }
+
+        if (update.getPassword() == null) {
+            update.setPassword(user.getPassword());
+        }
+
         modelMapper.map(update, user);
     }
 }

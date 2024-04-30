@@ -32,7 +32,7 @@ public class UserService {
 
 
         var savedUser = repository.save(user);
-        profileService.save(user);
+        profileService.save(savedUser);
         return savedUser;
 
     }
