@@ -49,6 +49,4 @@ public class ProfileController {
         userService.unfollow(user, profile);
         return profileAssembler.toResponse(user, profile);
     }
-
-
 }

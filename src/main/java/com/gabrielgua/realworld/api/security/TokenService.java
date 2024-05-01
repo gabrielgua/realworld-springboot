@@ -1,7 +1,10 @@
 package com.gabrielgua.realworld.api.security;
 
 import com.gabrielgua.realworld.api.security.AuthProperties;
+import com.gabrielgua.realworld.domain.exception.EmailNotFoundException;
 import com.gabrielgua.realworld.domain.model.User;
+import com.gabrielgua.realworld.domain.repository.UserRepository;
+import com.gabrielgua.realworld.domain.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -22,6 +25,7 @@ import java.util.function.Function;
 public class TokenService {
 
     private final AuthProperties properties;
+    private final UserRepository repository;
 
     public String generateToken(String subject) {
         return buildToken(new HashMap<String, Object>(), subject);
@@ -46,6 +50,11 @@ public class TokenService {
     }
 
     public boolean isTokenValid(String token, String subject) {
+        var user = repository.findByEmail(subject);
+        if (user.isEmpty()) {
+            return false;
+        }
+
         final String email = extractEmail(token);
         return email.equals(subject) && !isTokenExpired(token);
     }

@@ -1,5 +1,7 @@
 package com.gabrielgua.realworld.api.security;
 
+import com.gabrielgua.realworld.domain.model.User;
+import com.gabrielgua.realworld.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.security.core.Authentication;
@@ -20,6 +22,8 @@ public class AuthUtils {
     public String getCurrentUserEmail() {
         return getAuthentication().getName();
     }
+
+
 
     public boolean isAuthenticated() {
         return getAuthentication().isAuthenticated();

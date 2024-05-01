@@ -1,12 +1,17 @@
 package com.gabrielgua.realworld.api.security;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gabrielgua.realworld.api.exception.Error;
+import com.gabrielgua.realworld.domain.exception.EmailNotFoundException;
+import com.gabrielgua.realworld.domain.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 @Component
 @RequiredArgsConstructor

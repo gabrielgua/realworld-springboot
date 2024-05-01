@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -18,14 +19,14 @@ import java.util.List;
 public class Error {
 
     private int status;
-    private String title;
     private String message;
-    private List<Error.Field> body;
-
-    @Getter
-    @Setter
-    @Builder
-    public static class Field {
-        public String message;
-    }
+//    private List<Error.Field> body;
+    private Map<String, Object> errors;
+//
+//    @Getter
+//    @Setter
+//    @Builder
+//    public static class Field {
+//        public String message;
+//    }
 }
