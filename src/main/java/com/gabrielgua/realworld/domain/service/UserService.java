@@ -1,5 +1,7 @@
 package com.gabrielgua.realworld.domain.service;
 
+import com.gabrielgua.realworld.domain.exception.EmailNotFoundException;
+import com.gabrielgua.realworld.domain.model.Profile;
 import com.gabrielgua.realworld.domain.model.User;
 import com.gabrielgua.realworld.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +21,8 @@ public class UserService {
     private final String DEFAULT_IMAGE_URL = "https://api.realworld.io/images/smiley-cyrus.jpeg";
 
     @Transactional(readOnly = true)
-    public User findByEmail(String email) {
-        return repository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    public User getByEmail(String email) {
+        return repository.findByEmail(email).orElseThrow(() -> new EmailNotFoundException(email));
     }
 
     @Transactional
@@ -29,7 +31,6 @@ public class UserService {
             user.setPassword(encoder.encode(user.getPassword()));
             user.setImage(DEFAULT_IMAGE_URL);
         }
-
 
         var savedUser = repository.save(user);
         profileService.save(savedUser);
@@ -43,6 +44,15 @@ public class UserService {
         repository.save(user);
     }
 
+    @Transactional
+    public void follow(User user, Profile profile) {
+        user.followProfile(profile);
+        repository.save(user);
+    }
 
-
+    @Transactional
+    public void unfollow(User user, Profile profile) {
+        user.unfollowProfile(profile);
+        repository.save(user);
+    }
 }

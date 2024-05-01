@@ -34,7 +34,7 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(authenticate.getEmail(), authenticate.getPassword())
         );
 
-        var user = userService.findByEmail(authenticate.getEmail());
+        var user = userService.getByEmail(authenticate.getEmail());
         var token = tokenService.generateToken(setDefaultClaims(user), user.getEmail());
 
         userService.setToken(user, token);

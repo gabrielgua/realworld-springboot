@@ -1,10 +1,10 @@
 package com.gabrielgua.realworld.domain.service;
 
+import com.gabrielgua.realworld.domain.exception.ProfileNotFoundException;
 import com.gabrielgua.realworld.domain.model.Profile;
 import com.gabrielgua.realworld.domain.model.User;
 import com.gabrielgua.realworld.domain.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +16,12 @@ public class ProfileService {
 
     @Transactional(readOnly = true)
     public Profile getByUsername(String username) {
-        return repository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return repository.findByUsername(username).orElseThrow(() -> new ProfileNotFoundException(username));
+    }
+
+    @Transactional(readOnly = true)
+    public Profile getById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new ProfileNotFoundException(id));
     }
 
     @Transactional
@@ -43,4 +48,6 @@ public class ProfileService {
 
         repository.save(existingProfile);
     }
+
+
 }

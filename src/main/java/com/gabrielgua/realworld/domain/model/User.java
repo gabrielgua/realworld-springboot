@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -28,4 +30,20 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Profile profile;
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_following",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "profile_id")
+    )
+    private Set<Profile> following = new HashSet<>();
+
+    public void followProfile(Profile profile) {
+        getFollowing().add(profile);
+    }
+
+    public void unfollowProfile(Profile profile) {
+        getFollowing().remove(profile);
+    }
 }
