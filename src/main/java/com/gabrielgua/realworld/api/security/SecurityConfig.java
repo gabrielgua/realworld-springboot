@@ -1,5 +1,7 @@
 package com.gabrielgua.realworld.api.security;
 
+import com.gabrielgua.realworld.api.exception.RestAccessDeniedHandler;
+import com.gabrielgua.realworld.api.exception.RestAuthenticationEntryPoint;
 import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -24,9 +26,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final SecurityFilter securityFilter;
+    private final RestAccessDeniedHandler restAccessDeniedHandler;
+    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     private static final String[] PUBLIC_READ_ENDPOINTS = {
-            "/profiles", "/profiles/*", "/error"
+            "/error",
+            "/profiles", "/profiles/*",
+            "/articles", "/articles/*"
     };
 
     @Bean
@@ -41,6 +47,9 @@ public class SecurityConfig {
                         .requestMatchers(PUBLIC_READ_ENDPOINTS).permitAll()
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(handler -> handler
+                        .accessDeniedHandler(restAccessDeniedHandler)
+                        .authenticationEntryPoint(restAuthenticationEntryPoint))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

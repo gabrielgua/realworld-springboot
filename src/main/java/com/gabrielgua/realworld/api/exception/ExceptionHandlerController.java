@@ -5,20 +5,17 @@ import com.gabrielgua.realworld.domain.exception.GenericException;
 import com.gabrielgua.realworld.domain.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
-import org.apache.tomcat.util.codec.binary.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
 
 @Slf4j
 @RestControllerAdvice
@@ -75,6 +72,16 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         var message = ex.getMessage();
 
         var error = createErrorBuilder(status, message).build();
+        return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDenied(AccessDeniedException ex, WebRequest request) {
+        var status = HttpStatus.FORBIDDEN;
+        var message = "Missing credentials or you don't have access to this resource";
+
+        var error = createErrorBuilder(status, message).build();
+
         return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
     }
 

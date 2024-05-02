@@ -32,7 +32,6 @@ public class UserService {
 
         checkUserAvailable(user);
 
-
         if (user.getId() == null) {
             user.setPassword(encoder.encode(user.getPassword()));
             user.setImage(DEFAULT_IMAGE_URL);

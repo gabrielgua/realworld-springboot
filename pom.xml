@@ -17,6 +17,7 @@
 		<java.version>21</java.version>
 		<jjwt.version>0.11.5</jjwt.version>
 		<modelmapper.version>3.1.1</modelmapper.version>
+		<slugify.version>3.0.3</slugify.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -83,6 +84,11 @@
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
 			<version>${modelmapper.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.slugify</groupId>
+			<artifactId>slugify</artifactId>
+			<version>${slugify.version}</version>
 		</dependency>
 	</dependencies>
 
