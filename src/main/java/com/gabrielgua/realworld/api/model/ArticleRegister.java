@@ -5,25 +5,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
 @JsonTypeName("article")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
-public class ArticleResponse {
+public class ArticleRegister {
 
-    private String slug;
     private String title;
     private String description;
     private String body;
-    private List<String> tagList;
-    private OffsetDateTime createdAt;
-    private OffsetDateTime updatedAt;
-    private boolean favorited;
-    private int favoritesCount;
+    private Set<String> tagList;
 
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
-    private ProfileResponse author;
 }

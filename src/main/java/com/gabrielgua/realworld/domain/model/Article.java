@@ -2,11 +2,13 @@ package com.gabrielgua.realworld.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -24,6 +26,7 @@ public class Article {
     private String body;
 
     @ManyToMany
+//    @Cascade({org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.MERGE})
     @JoinTable(
             name = "articles_tags",
             joinColumns = @JoinColumn(name = "article_id"),
@@ -34,6 +37,7 @@ public class Article {
     @JoinColumn(name = "author_id")
     private Profile author;
 
+
     private int favoritesCount = 0;
 
     @CreationTimestamp
@@ -42,5 +46,12 @@ public class Article {
     @UpdateTimestamp
     private OffsetDateTime updatedAt;
 
+    public void addTag(Tag tag) {
+        getTagList().add(tag);
+    }
+
+    public void removeTag(Tag tag) {
+        getTagList().remove(tag);
+    }
 
 }

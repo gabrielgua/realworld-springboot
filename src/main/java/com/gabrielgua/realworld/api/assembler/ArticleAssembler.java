@@ -1,7 +1,9 @@
 package com.gabrielgua.realworld.api.assembler;
 
+import com.gabrielgua.realworld.api.model.ArticleRegister;
 import com.gabrielgua.realworld.api.model.ArticleResponse;
 import com.gabrielgua.realworld.domain.model.Article;
+import com.gabrielgua.realworld.domain.model.Tag;
 import com.gabrielgua.realworld.domain.model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,9 @@ public class ArticleAssembler {
     private ModelMapper modelMapper;
 
     public ArticleResponse toResponse(Article article) {
-        return modelMapper.map(article, ArticleResponse.class);
+        var response = modelMapper.map(article, ArticleResponse.class);
+        response.setTagList(tagsToList(article.getTagList().stream().toList()));
+        return response;
     }
 
     public ArticleResponse toResponse(User user, Article article) {
@@ -30,7 +34,7 @@ public class ArticleAssembler {
 //              response.setFavorited(true);
 //        }
 
-
+        response.setTagList(tagsToList(article.getTagList().stream().toList()));
         return response;
     }
 
@@ -43,6 +47,16 @@ public class ArticleAssembler {
     public List<ArticleResponse> toCollectionModel(User user, List<Article> articles) {
         return articles.stream()
                 .map(a -> toResponse(user, a))
+                .toList();
+    }
+
+    public Article toEntity(ArticleRegister register) {
+        return modelMapper.map(register, Article.class);
+    }
+
+    private List<String> tagsToList(List<Tag> tags) {
+        return tags.stream()
+                .map(Tag::getName)
                 .toList();
     }
 

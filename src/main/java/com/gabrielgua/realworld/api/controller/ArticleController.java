@@ -1,17 +1,16 @@
 package com.gabrielgua.realworld.api.controller;
 
 import com.gabrielgua.realworld.api.assembler.ArticleAssembler;
+import com.gabrielgua.realworld.api.model.ArticleRegister;
 import com.gabrielgua.realworld.api.model.ArticleResponse;
 import com.gabrielgua.realworld.api.security.AuthUtils;
 import com.gabrielgua.realworld.domain.model.User;
 import com.gabrielgua.realworld.domain.service.ArticleService;
+import com.gabrielgua.realworld.domain.service.TagService;
 import com.gabrielgua.realworld.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
@@ -24,6 +23,7 @@ public class ArticleController {
     private final ArticleService articleService;
     private final ArticleAssembler assembler;
     private final UserService userService;
+    private final TagService tagService;
     private final AuthUtils authUtils;
 
 
@@ -56,6 +56,16 @@ public class ArticleController {
 
         var user = getCurrentUser();
         return assembler.toResponse(user, article);
+    }
+
+
+    @PostMapping
+    public ArticleResponse save(@RequestBody ArticleRegister register) {
+        var user = getCurrentUser();
+        var tags = tagService.saveAll(register.getTagList().stream().toList());
+        var article = assembler.toEntity(register);
+
+        return assembler.toResponse(user, articleService.save(article, user.getProfile(), tags));
     }
 
 
