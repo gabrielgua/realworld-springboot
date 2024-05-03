@@ -25,8 +25,7 @@ public class Article {
     private String description;
     private String body;
 
-    @ManyToMany
-//    @Cascade({org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "articles_tags",
             joinColumns = @JoinColumn(name = "article_id"),
@@ -36,7 +35,6 @@ public class Article {
     @ManyToOne
     @JoinColumn(name = "author_id")
     private Profile author;
-
 
     private int favoritesCount = 0;
 

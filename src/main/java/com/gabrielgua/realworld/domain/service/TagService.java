@@ -27,6 +27,11 @@ public class TagService {
     }
 
     @Transactional
+    public Tag getByName(String name) {
+        return repository.findByName(name).orElseThrow(() -> new TagNotFoundException(name));
+    }
+
+    @Transactional
     public Tag save(Tag tag) {
         var existingTag = repository.findByName(tag.getName());
         return existingTag.map(repository::save).orElseGet(() -> repository.save(tag));

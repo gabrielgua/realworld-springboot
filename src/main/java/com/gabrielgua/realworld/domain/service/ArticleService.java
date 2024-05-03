@@ -5,6 +5,7 @@ import com.gabrielgua.realworld.domain.model.Article;
 import com.gabrielgua.realworld.domain.model.Profile;
 import com.gabrielgua.realworld.domain.model.Tag;
 import com.gabrielgua.realworld.domain.repository.ArticleRepository;
+import com.gabrielgua.realworld.infra.spec.ArticleSpecification;
 import com.github.slugify.Slugify;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,8 @@ public class ArticleService {
     private final Slugify slg;
 
     @Transactional(readOnly = true)
-    public List<Article> listAll() {
-        return repository.findAll();
+    public List<Article> listAll(ArticleSpecification filter) {
+        return repository.findAll(filter);
     }
 
     @Transactional(readOnly = true)
