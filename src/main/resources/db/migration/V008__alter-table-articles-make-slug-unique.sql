@@ -1,0 +1,1 @@
+alter table articles add unique (slug);

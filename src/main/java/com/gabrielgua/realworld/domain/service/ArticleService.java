@@ -1,6 +1,7 @@
 package com.gabrielgua.realworld.domain.service;
 
 import com.gabrielgua.realworld.api.model.UserResponse;
+import com.gabrielgua.realworld.domain.exception.ArticleAlreadyRegisteredException;
 import com.gabrielgua.realworld.domain.exception.ArticleNotFoundException;
 import com.gabrielgua.realworld.domain.model.Article;
 import com.gabrielgua.realworld.domain.model.Profile;
@@ -35,9 +36,14 @@ public class ArticleService {
 
     @Transactional
     public Article save(Article article, Profile profile, List<Tag> tags) {
-        article.setAuthor(profile);
         article.setSlug(slg.slugify(article.getTitle()));
 
+        var existingArticle = repository.findBySlug(article.getSlug());
+        if (existingArticle.isPresent()) {
+            throw new ArticleAlreadyRegisteredException(article.getSlug());
+        }
+
+        article.setAuthor(profile);
         addAllTags(article, tags);
         return repository.save(article);
     }

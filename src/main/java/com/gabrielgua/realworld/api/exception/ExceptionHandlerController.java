@@ -1,10 +1,10 @@
 package com.gabrielgua.realworld.api.exception;
 
 import com.gabrielgua.realworld.domain.exception.AlreadyTakenException;
-import com.gabrielgua.realworld.domain.exception.GenericException;
+import com.gabrielgua.realworld.domain.exception.ArticleAlreadyRegisteredException;
+import com.gabrielgua.realworld.domain.exception.BusinessException;
 import com.gabrielgua.realworld.domain.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -57,8 +57,8 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
     }
 
-    @ExceptionHandler(GenericException.class)
-    public ResponseEntity<?> handleGeneric(GenericException ex, WebRequest request) {
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<?> handleGeneric(BusinessException ex, WebRequest request) {
         var status = HttpStatus.INTERNAL_SERVER_ERROR;
         var message = ex.getMessage();
         var error = createErrorBuilder(status, ex.getMessage()).build();
@@ -82,6 +82,15 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
         var error = createErrorBuilder(status, message).build();
 
+        return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(ArticleAlreadyRegisteredException.class)
+    public ResponseEntity<?> handleArticleAlreadyRegistered(ArticleAlreadyRegisteredException ex, WebRequest request) {
+        var status = HttpStatus.UNPROCESSABLE_ENTITY;
+        var message = ex.getMessage();
+
+        var error = createErrorBuilder(status, message).build();
         return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
     }
 
