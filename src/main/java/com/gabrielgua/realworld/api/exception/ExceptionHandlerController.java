@@ -5,6 +5,7 @@ import com.gabrielgua.realworld.domain.exception.ArticleAlreadyRegisteredExcepti
 import com.gabrielgua.realworld.domain.exception.BusinessException;
 import com.gabrielgua.realworld.domain.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -87,6 +88,15 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ArticleAlreadyRegisteredException.class)
     public ResponseEntity<?> handleArticleAlreadyRegistered(ArticleAlreadyRegisteredException ex, WebRequest request) {
+        var status = HttpStatus.UNPROCESSABLE_ENTITY;
+        var message = ex.getMessage();
+
+        var error = createErrorBuilder(status, message).build();
+        return handleExceptionInternal(ex, error, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleIllegalArgument(IllegalArgumentException ex, WebRequest request) {
         var status = HttpStatus.UNPROCESSABLE_ENTITY;
         var message = ex.getMessage();
 

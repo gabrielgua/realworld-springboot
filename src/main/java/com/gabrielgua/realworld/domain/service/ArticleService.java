@@ -1,6 +1,5 @@
 package com.gabrielgua.realworld.domain.service;
 
-import com.gabrielgua.realworld.api.model.UserResponse;
 import com.gabrielgua.realworld.domain.exception.ArticleAlreadyRegisteredException;
 import com.gabrielgua.realworld.domain.exception.ArticleNotFoundException;
 import com.gabrielgua.realworld.domain.model.Article;
@@ -11,6 +10,8 @@ import com.gabrielgua.realworld.domain.repository.ArticleRepository;
 import com.gabrielgua.realworld.infra.spec.ArticleSpecification;
 import com.github.slugify.Slugify;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +26,8 @@ public class ArticleService {
     private final Slugify slg;
 
     @Transactional(readOnly = true)
-    public List<Article> listAll(ArticleSpecification filter) {
-        return repository.findAll(filter);
+    public Page<Article> listAll(ArticleSpecification filter, Pageable pageable) {
+        return repository.findAll(filter, pageable);
     }
 
     @Transactional(readOnly = true)

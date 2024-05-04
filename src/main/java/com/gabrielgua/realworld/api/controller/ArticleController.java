@@ -3,27 +3,20 @@ package com.gabrielgua.realworld.api.controller;
 import com.gabrielgua.realworld.api.assembler.ArticleAssembler;
 import com.gabrielgua.realworld.api.model.ArticleRegister;
 import com.gabrielgua.realworld.api.model.ArticleResponse;
-import com.gabrielgua.realworld.api.model.UserResponse;
 import com.gabrielgua.realworld.api.security.AuthUtils;
-import com.gabrielgua.realworld.domain.filter.ArticleFilter;
-import com.gabrielgua.realworld.domain.model.Article;
 import com.gabrielgua.realworld.domain.model.User;
-import com.gabrielgua.realworld.domain.repository.ArticleRepository;
 import com.gabrielgua.realworld.domain.service.ArticleService;
 import com.gabrielgua.realworld.domain.service.TagService;
 import com.gabrielgua.realworld.domain.service.UserService;
 import com.gabrielgua.realworld.infra.spec.ArticleSpecification;
 import lombok.RequiredArgsConstructor;
-import net.kaczmarzyk.spring.data.jpa.domain.Like;
-import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
-import net.kaczmarzyk.spring.data.jpa.web.annotation.Join;
-import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -37,6 +30,10 @@ public class ArticleController {
     private final TagService tagService;
     private final AuthUtils authUtils;
 
+    private static final String DEFAULT_FILTER_LIMIT = "20";
+    private static final String DEFAULT_FILTER_OFFSET = "0";
+    private static final Sort DEFAULT_FILTER_SORT = Sort.by(Sort.Direction.DESC, "createdAt");
+
 
     private User getCurrentUser() {
         return userService.getByEmail(authUtils.getCurrentUserEmail());
@@ -47,8 +44,16 @@ public class ArticleController {
     }
 
     @GetMapping
-    public List<ArticleResponse> getAll(ArticleSpecification filter, WebRequest request) {
-        var articles = articleService.listAll(filter);
+    public List<ArticleResponse> getAll(
+            WebRequest request,
+            ArticleSpecification filter,
+            @RequestParam(required = false, defaultValue = DEFAULT_FILTER_LIMIT) int limit,
+            @RequestParam(required = false, defaultValue = DEFAULT_FILTER_OFFSET) int offset) {
+
+
+        Pageable pageable = PageRequest.of(offset, limit, DEFAULT_FILTER_SORT);
+        var articles = articleService.listAll(filter, pageable).getContent();
+
 
         if (!hasAuthorizationHeader(request)) {
             return assembler.toCollectionModel(articles);
