@@ -3,6 +3,8 @@ package com.gabrielgua.realworld.domain.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter

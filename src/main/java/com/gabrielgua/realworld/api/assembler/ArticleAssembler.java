@@ -20,7 +20,6 @@ public class ArticleAssembler {
     public ArticleResponse toResponse(Article article) {
         var response = modelMapper.map(article, ArticleResponse.class);
 
-        System.out.println(article.getTagList());
         response.setTagList(tagsToList(article.getTagList().stream().toList()));
         return response;
     }
@@ -32,12 +31,10 @@ public class ArticleAssembler {
             response.getAuthor().setFollowing(true);
         }
 
+        if (article.getFavorites().contains(user)) {
+            response.setFavorited(true);
+        }
 
-//        if (user.getFavorited().contains(article)) {
-//              response.setFavorited(true);
-//        }
-
-        System.out.println(article.getTagList());
         response.setTagList(tagsToList(article.getTagList().stream().toList()));
         return response;
     }

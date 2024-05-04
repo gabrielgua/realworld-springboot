@@ -1,9 +1,11 @@
 package com.gabrielgua.realworld.domain.service;
 
+import com.gabrielgua.realworld.api.model.UserResponse;
 import com.gabrielgua.realworld.domain.exception.ArticleNotFoundException;
 import com.gabrielgua.realworld.domain.model.Article;
 import com.gabrielgua.realworld.domain.model.Profile;
 import com.gabrielgua.realworld.domain.model.Tag;
+import com.gabrielgua.realworld.domain.model.User;
 import com.gabrielgua.realworld.domain.repository.ArticleRepository;
 import com.gabrielgua.realworld.infra.spec.ArticleSpecification;
 import com.github.slugify.Slugify;
@@ -40,8 +42,25 @@ public class ArticleService {
         return repository.save(article);
     }
 
+    @Transactional
+    public void save(Article article) {
+        repository.save(article);
+    }
+
     private void addAllTags(Article article, List<Tag> tags) {
         article.setTagList(new HashSet<>());
         tags.forEach(article::addTag);
+    }
+
+    @Transactional
+    public Article userFavorited(User user, Article article) {
+        article.addFavorite(user);
+        return repository.save(article);
+    }
+
+    @Transactional
+    public Article userUnfavorited(User user, Article article) {
+        article.removeFavorite(user);
+        return repository.save(article);
     }
 }

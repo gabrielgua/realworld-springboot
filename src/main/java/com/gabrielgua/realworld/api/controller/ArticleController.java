@@ -3,6 +3,7 @@ package com.gabrielgua.realworld.api.controller;
 import com.gabrielgua.realworld.api.assembler.ArticleAssembler;
 import com.gabrielgua.realworld.api.model.ArticleRegister;
 import com.gabrielgua.realworld.api.model.ArticleResponse;
+import com.gabrielgua.realworld.api.model.UserResponse;
 import com.gabrielgua.realworld.api.security.AuthUtils;
 import com.gabrielgua.realworld.domain.filter.ArticleFilter;
 import com.gabrielgua.realworld.domain.model.Article;

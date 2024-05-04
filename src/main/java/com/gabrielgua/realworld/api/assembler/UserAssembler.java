@@ -10,6 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class UserAssembler {
 
@@ -46,5 +48,11 @@ public class UserAssembler {
         }
 
         modelMapper.map(update, user);
+    }
+
+    public List<UserResponse> toCollectionResponse(List<User> users) {
+        return users.stream()
+                .map(this::toResponse)
+                .toList();
     }
 }

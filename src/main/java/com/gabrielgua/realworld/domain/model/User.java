@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 @Entity
@@ -39,13 +38,13 @@ public class User {
     )
     private Set<Profile> following = new HashSet<>();
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "users_favorited",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "article_id")
-//    )
-//    private Set<Article> favorited = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "users_articles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "article_id")
+    )
+    private Set<Article> favoritedArticles = new HashSet<>();
 
     public void followProfile(Profile profile) {
         getFollowing().add(profile);
@@ -53,5 +52,13 @@ public class User {
 
     public void unfollowProfile(Profile profile) {
         getFollowing().remove(profile);
+    }
+
+    public void favoriteArticle(Article article) {
+        getFavoritedArticles().add(article);
+    }
+
+    public void unfavoriteArticle(Article article) {
+        getFavoritedArticles().remove(article);
     }
 }

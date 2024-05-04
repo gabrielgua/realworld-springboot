@@ -2,6 +2,7 @@ package com.gabrielgua.realworld.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -36,6 +37,9 @@ public class Article {
     @JoinColumn(name = "author_id")
     private Profile author;
 
+    @ManyToMany(mappedBy = "favoritedArticles")
+    private Set<User> favorites = new HashSet<>();
+
     private int favoritesCount = 0;
 
     @CreationTimestamp
@@ -48,8 +52,17 @@ public class Article {
         getTagList().add(tag);
     }
 
-    public void removeTag(Tag tag) {
-        getTagList().remove(tag);
+    public void updateFavoritedCount() {
+        setFavoritesCount(getFavorites().size());
     }
 
+    public void addFavorite(User user) {
+        getFavorites().add(user);
+        updateFavoritedCount();
+    }
+
+    public void removeFavorite(User user) {
+        getFavorites().remove(user);
+        updateFavoritedCount();
+    }
 }
