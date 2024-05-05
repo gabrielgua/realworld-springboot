@@ -22,8 +22,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ArticleService {
 
-    private final ArticleRepository repository;
     private final Slugify slg;
+    private final ArticleRepository repository;
 
     @Transactional(readOnly = true)
     public Page<Article> listAll(ArticleSpecification filter, Pageable pageable) {
@@ -35,28 +35,23 @@ public class ArticleService {
         return repository.findBySlug(slug).orElseThrow(() -> new ArticleNotFoundException(slug));
     }
 
+    @Transactional(readOnly = true)
+    public List<Article> getFeedByUser(User user, Pageable pageable) {
+        List<User> followedUsers = user.getFollowing().stream().map(Profile::getUser).toList();
+
+        return repository.findAllByAuthorIn(followedUsers, pageable);
+    }
+
     @Transactional
     public Article save(Article article, Profile profile, List<Tag> tags) {
-        article.setSlug(slg.slugify(article.getTitle()));
+        var slug = slg.slugify(article.getTitle());
 
-        var existingArticle = repository.findBySlug(article.getSlug());
-        if (existingArticle.isPresent()) {
-            throw new ArticleAlreadyRegisteredException(article.getSlug());
-        }
+        checkSlugAvailability(slug);
 
-        article.setAuthor(profile);
+        article.setSlug(slug);
         addAllTags(article, tags);
+        article.setAuthor(profile);
         return repository.save(article);
-    }
-
-    @Transactional
-    public void save(Article article) {
-        repository.save(article);
-    }
-
-    private void addAllTags(Article article, List<Tag> tags) {
-        article.setTagList(new HashSet<>());
-        tags.forEach(article::addTag);
     }
 
     @Transactional
@@ -69,5 +64,16 @@ public class ArticleService {
     public Article userUnfavorited(User user, Article article) {
         article.removeFavorite(user);
         return repository.save(article);
+    }
+
+    private void checkSlugAvailability(String slug) {
+        if (repository.existsBySlug(slug)) {
+            throw new ArticleAlreadyRegisteredException(slug);
+        }
+    }
+
+    private void addAllTags(Article article, List<Tag> tags) {
+        article.setTagList(new HashSet<>());
+        tags.forEach(article::addTag);
     }
 }

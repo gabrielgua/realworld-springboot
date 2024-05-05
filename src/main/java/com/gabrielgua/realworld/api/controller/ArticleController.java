@@ -3,8 +3,7 @@ package com.gabrielgua.realworld.api.controller;
 import com.gabrielgua.realworld.api.assembler.ArticleAssembler;
 import com.gabrielgua.realworld.api.model.ArticleRegister;
 import com.gabrielgua.realworld.api.model.ArticleResponse;
-import com.gabrielgua.realworld.api.security.AuthUtils;
-import com.gabrielgua.realworld.domain.model.User;
+import com.gabrielgua.realworld.domain.model.Tag;
 import com.gabrielgua.realworld.domain.service.ArticleService;
 import com.gabrielgua.realworld.domain.service.TagService;
 import com.gabrielgua.realworld.domain.service.UserService;
@@ -17,27 +16,24 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/articles")
 public class ArticleController {
 
-    private final ArticleService articleService;
-    private final ArticleAssembler assembler;
-    private final UserService userService;
     private final TagService tagService;
-    private final AuthUtils authUtils;
+    private final UserService userService;
+    private final ArticleService articleService;
+    private final ArticleAssembler articleAssembler;
 
     private static final String DEFAULT_FILTER_LIMIT = "20";
     private static final String DEFAULT_FILTER_OFFSET = "0";
     private static final Sort DEFAULT_FILTER_SORT = Sort.by(Sort.Direction.DESC, "createdAt");
-
-
-    private User getCurrentUser() {
-        return userService.getByEmail(authUtils.getCurrentUserEmail());
-    }
 
     private boolean hasAuthorizationHeader(WebRequest request) {
         return request.getHeader(HttpHeaders.AUTHORIZATION) != null;
@@ -56,31 +52,47 @@ public class ArticleController {
 
 
         if (!hasAuthorizationHeader(request)) {
-            return assembler.toCollectionModel(articles);
+            return articleAssembler.toCollectionModel(articles);
         }
 
-        var user = getCurrentUser();
-        return assembler.toCollectionModel(user, articles);
+        var user = userService.getCurrentUser();
+        return articleAssembler.toCollectionModel(user, articles);
+    }
+
+    @GetMapping("/feed")
+    public List<ArticleResponse> getFeed(
+            @RequestParam(required = false, defaultValue = DEFAULT_FILTER_LIMIT) int limit,
+            @RequestParam(required = false, defaultValue = DEFAULT_FILTER_OFFSET) int offset) {
+
+        var user = userService.getCurrentUser();
+        Pageable pageable = PageRequest.of(offset, limit, DEFAULT_FILTER_SORT);
+        var articles = articleService.getFeedByUser(user, pageable);
+
+        return articleAssembler.toCollectionModel(user, articles);
     }
 
     @GetMapping("/{slug}")
     public ArticleResponse getBySlug(@PathVariable String slug, WebRequest request) {
         var article = articleService.getBySlug(slug);
         if (!hasAuthorizationHeader(request)) {
-            return assembler.toResponse(article);
+            return articleAssembler.toResponse(article);
         }
 
-        var user = getCurrentUser();
-        return assembler.toResponse(user, article);
+        var user = userService.getCurrentUser();
+        return articleAssembler.toResponse(user, article);
     }
-
 
     @PostMapping
     public ArticleResponse save(@RequestBody ArticleRegister register) {
-        var user = getCurrentUser();
-        var tags = tagService.saveAll(register.getTagList().stream().toList());
-        var article = assembler.toEntity(register);
+        var user = userService.getCurrentUser();
 
-        return assembler.toResponse(user, articleService.save(article, user.getProfile(), tags));
+        List<Tag> tags = new ArrayList<>();
+        if (register.getTagList() != null) {
+            tags = tagService.saveAll(register.getTagList().stream().toList());
+        }
+
+        var article = articleAssembler.toEntity(register);
+        return articleAssembler.toResponse(user, articleService.save(article, user.getProfile(), tags));
     }
+
 }

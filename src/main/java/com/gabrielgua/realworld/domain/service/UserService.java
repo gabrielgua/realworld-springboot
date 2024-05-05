@@ -19,7 +19,6 @@ public class UserService {
     private final UserRepository repository;
     private final PasswordEncoder encoder;
     private final ProfileService profileService;
-    private final ArticleService articleService;
     private final AuthUtils authUtils;
 
     public User getCurrentUser() {
