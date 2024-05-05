@@ -11,8 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonTypeName("user")
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
-public class UserResponse {
+public class UserResponse extends BaseResponse {
 
     private String email;
     private String username;

@@ -1,21 +1,21 @@
 package com.gabrielgua.realworld.api.model;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
 @JsonTypeName("article")
-public class ArticleRegister extends BaseResponse {
+public class ArticleUpdate extends BaseResponse {
 
+    @Nullable
     private String title;
-    private String description;
-    private String body;
-    private Set<String> tagList;
 
+    @Nullable
+    private String description;
+
+    @Nullable
+    private String body;
 }

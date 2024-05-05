@@ -9,8 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonTypeName("profile")
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
-public class ProfileResponse {
+public class ProfileResponse extends BaseResponse {
 
     private String username;
     private String bio;

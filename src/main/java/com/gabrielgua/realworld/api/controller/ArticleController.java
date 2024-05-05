@@ -3,6 +3,8 @@ package com.gabrielgua.realworld.api.controller;
 import com.gabrielgua.realworld.api.assembler.ArticleAssembler;
 import com.gabrielgua.realworld.api.model.ArticleRegister;
 import com.gabrielgua.realworld.api.model.ArticleResponse;
+import com.gabrielgua.realworld.api.model.ArticleUpdate;
+import com.gabrielgua.realworld.api.security.authorization.CheckSecurity;
 import com.gabrielgua.realworld.domain.model.Tag;
 import com.gabrielgua.realworld.domain.service.ArticleService;
 import com.gabrielgua.realworld.domain.service.TagService;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
@@ -50,7 +53,6 @@ public class ArticleController {
         Pageable pageable = PageRequest.of(offset, limit, DEFAULT_FILTER_SORT);
         var articles = articleService.listAll(filter, pageable).getContent();
 
-
         if (!hasAuthorizationHeader(request)) {
             return articleAssembler.toCollectionModel(articles);
         }
@@ -62,7 +64,8 @@ public class ArticleController {
     @GetMapping("/feed")
     public List<ArticleResponse> getFeed(
             @RequestParam(required = false, defaultValue = DEFAULT_FILTER_LIMIT) int limit,
-            @RequestParam(required = false, defaultValue = DEFAULT_FILTER_OFFSET) int offset) {
+            @RequestParam(required = false, defaultValue = DEFAULT_FILTER_OFFSET) int offset
+    ) {
 
         var user = userService.getCurrentUser();
         Pageable pageable = PageRequest.of(offset, limit, DEFAULT_FILTER_SORT);
@@ -83,6 +86,8 @@ public class ArticleController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @CheckSecurity.Default.canWrite
     public ArticleResponse save(@RequestBody ArticleRegister register) {
         var user = userService.getCurrentUser();
 
@@ -93,6 +98,15 @@ public class ArticleController {
 
         var article = articleAssembler.toEntity(register);
         return articleAssembler.toResponse(user, articleService.save(article, user.getProfile(), tags));
+    }
+
+    @PutMapping("/{slug}")
+    @CheckSecurity.Articles.canManageArticles
+    public ArticleResponse update(@PathVariable String slug, @RequestBody ArticleUpdate update) {
+        var article = articleService.getBySlug(slug);
+        articleAssembler.copyToEntity(update, article);
+
+        return articleAssembler.toResponse(article);
     }
 
 }

@@ -11,8 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @JsonTypeName("article")
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
-public class ArticleResponse {
+public class ArticleResponse extends BaseResponse {
 
     private String slug;
     private String title;

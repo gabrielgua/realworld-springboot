@@ -27,26 +27,6 @@ public class UserAssembler {
     }
 
     public void copyToEntity(UserUpdate update, User user) {
-        if (update.getBio() == null) {
-            update.setBio(user.getBio());
-        }
-
-        if (update.getImage() == null) {
-            update.setImage(user.getImage());
-        }
-
-        if (update.getEmail() == null) {
-            update.setEmail(user.getEmail());
-        }
-
-        if (update.getUsername() == null) {
-            update.setUsername(user.getUsername());
-        }
-
-        if (update.getPassword() == null) {
-            update.setPassword(user.getPassword());
-        }
-
         modelMapper.map(update, user);
     }
 

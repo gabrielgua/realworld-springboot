@@ -3,7 +3,7 @@ package com.gabrielgua.realworld.api.controller;
 import com.gabrielgua.realworld.api.assembler.ProfileAssembler;
 import com.gabrielgua.realworld.api.model.ProfileResponse;
 import com.gabrielgua.realworld.api.security.AuthUtils;
-import com.gabrielgua.realworld.api.security.CheckSecurity;
+import com.gabrielgua.realworld.api.security.authorization.CheckSecurity;
 import com.gabrielgua.realworld.domain.service.ProfileService;
 import com.gabrielgua.realworld.domain.service.UserService;
 import lombok.RequiredArgsConstructor;

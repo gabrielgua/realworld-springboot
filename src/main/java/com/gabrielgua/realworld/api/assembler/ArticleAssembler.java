@@ -2,6 +2,7 @@ package com.gabrielgua.realworld.api.assembler;
 
 import com.gabrielgua.realworld.api.model.ArticleRegister;
 import com.gabrielgua.realworld.api.model.ArticleResponse;
+import com.gabrielgua.realworld.api.model.ArticleUpdate;
 import com.gabrielgua.realworld.domain.model.Article;
 import com.gabrielgua.realworld.domain.model.Tag;
 import com.gabrielgua.realworld.domain.model.User;
@@ -16,6 +17,10 @@ public class ArticleAssembler {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    public void copyToEntity(ArticleUpdate update, Article article) {
+        modelMapper.map(update, article);
+    }
 
     public ArticleResponse toResponse(Article article) {
         var response = modelMapper.map(article, ArticleResponse.class);

@@ -44,9 +44,10 @@ public class SecurityConfig {
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
-                        .requestMatchers(PUBLIC_READ_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET, PUBLIC_READ_ENDPOINTS).permitAll()
                         .anyRequest().authenticated()
                 )
+                .anonymous(AbstractHttpConfigurer::disable)
                 .exceptionHandling(handler -> handler
                         .accessDeniedHandler(restAccessDeniedHandler)
                         .authenticationEntryPoint(restAuthenticationEntryPoint))

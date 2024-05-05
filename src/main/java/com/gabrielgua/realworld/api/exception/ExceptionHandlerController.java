@@ -79,7 +79,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> handleAccessDenied(AccessDeniedException ex, WebRequest request) {
         var status = HttpStatus.FORBIDDEN;
-        var message = "Missing credentials or you don't have access to this resource";
+        var message = "You don't have access to this resource";
 
         var error = createErrorBuilder(status, message).build();
 

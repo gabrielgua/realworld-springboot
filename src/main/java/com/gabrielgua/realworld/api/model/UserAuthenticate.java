@@ -10,8 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonTypeName("user")
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
-public class UserAuthenticate {
+public class UserAuthenticate extends BaseResponse {
 
     @Email
     @NotBlank
