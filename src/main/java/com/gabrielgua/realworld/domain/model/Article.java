@@ -26,7 +26,7 @@ public class Article {
     private String description;
     private String body;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinTable(
             name = "articles_tags",
             joinColumns = @JoinColumn(name = "article_id"),
@@ -37,7 +37,7 @@ public class Article {
     @JoinColumn(name = "author_id")
     private Profile author;
 
-    @ManyToMany(mappedBy = "favoritedArticles")
+    @ManyToMany(mappedBy = "favoritedArticles", cascade = CascadeType.DETACH)
     private Set<User> favorites = new HashSet<>();
 
     private int favoritesCount = 0;

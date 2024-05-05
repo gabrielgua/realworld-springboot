@@ -44,32 +44,26 @@ public class ArticleService {
 
     @Transactional
     public Article save(Article article, Profile profile, List<Tag> tags) {
+        addAllTags(article, tags);
+        article.setAuthor(profile);
+        return save(article);
+    }
+
+    @Transactional
+    public Article save(Article article) {
         var slug = slg.slugify(article.getTitle());
-
         checkSlugAvailability(slug, article);
-
-        if (article.getId() == null) {
-            addAllTags(article, tags);
-            article.setAuthor(profile);
-        }
-
         article.setSlug(slug);
+
         return repository.save(article);
     }
 
-//    @Transactional
-//    public Article update(Article article) {
-//        var slug = slg.slugify(article.getTitle());
-//
-//        article.setSlug(slug);
-//        checkSlugAvailability(article);
-//    }
+    @Transactional
+    public void delete(Article article) {
+        var favorited = article.getFavorites();
+        favorited.forEach(u -> u.unfavoriteArticle(article));
 
-
-
-    private boolean slugTaken(String slug, Article article) {
-        var existingArticle = repository.findBySlug(slug);
-        return existingArticle.isPresent() && !existingArticle.get().equals(article);
+        repository.delete(article);
     }
 
     @Transactional
@@ -84,12 +78,17 @@ public class ArticleService {
         return repository.save(article);
     }
 
-    private void checkSlugAvailability(String slug, Article article) {
-        if (slugTaken(slug, article)) throw new ArticleAlreadyRegisteredException(slug);
-    }
-
     private void addAllTags(Article article, List<Tag> tags) {
         article.setTagList(new HashSet<>());
         tags.forEach(article::addTag);
+    }
+
+    private boolean slugTaken(String slug, Article article) {
+        var existingArticle = repository.findBySlug(slug);
+        return existingArticle.isPresent() && !existingArticle.get().equals(article);
+    }
+
+    private void checkSlugAvailability(String slug, Article article) {
+        if (slugTaken(slug, article)) throw new ArticleAlreadyRegisteredException(slug);
     }
 }

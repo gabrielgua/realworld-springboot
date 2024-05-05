@@ -104,7 +104,14 @@ public class ArticleController {
         var article = articleService.getBySlug(slug);
         articleAssembler.copyToEntity(update, article);
 
-        return articleAssembler.toResponse(articleService.save(article, article.getAuthor(), article.getTagList().stream().toList()));
+        return articleAssembler.toResponse(articleService.save(article));
+    }
+
+    @DeleteMapping("/{slug}")
+    @CheckSecurity.Articles.canManage
+    public void delete(@PathVariable String slug) {
+        var article = articleService.getBySlug(slug);
+        articleService.delete(article);
     }
 
 }
