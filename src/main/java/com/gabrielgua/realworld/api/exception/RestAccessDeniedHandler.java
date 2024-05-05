@@ -16,22 +16,20 @@ import java.util.HashMap;
 public class RestAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse httpResponse, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        var response = new HashMap<>();
-        var status = HttpStatus.UNAUTHORIZED;
+        var status = HttpStatus.FORBIDDEN.value();
         var error = Error.builder()
                 .message("Access denied")
-                .status(status.value())
+                .status("error")
                 .build();
 
-        response.put("error", error);
 
 
-        httpResponse.setStatus(status.value());
+        httpResponse.setStatus(status);
         httpResponse.setContentType("application/json");
         
         var out = httpResponse.getOutputStream();
         var mapper = new ObjectMapper();
-        mapper.writerWithDefaultPrettyPrinter().writeValue(out, response);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(out, error);
         out.flush();
     }
 }

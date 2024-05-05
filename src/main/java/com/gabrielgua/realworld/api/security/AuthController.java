@@ -5,6 +5,7 @@ import com.gabrielgua.realworld.api.model.UserAuthenticate;
 import com.gabrielgua.realworld.api.model.UserRegister;
 import com.gabrielgua.realworld.api.model.UserResponse;
 import com.gabrielgua.realworld.domain.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,13 +23,13 @@ public class AuthController {
     private final UserAssembler userAssembler;
 
     @PostMapping
-    public ResponseEntity<UserResponse> register(@RequestBody UserRegister register) {
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRegister register) {
         var user = userAssembler.toEntity(register);
         return ResponseEntity.ok(authService.register(userService.save(user)));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponse> authenticate(@RequestBody UserAuthenticate authenticate) {
+    public ResponseEntity<UserResponse> authenticate(@Valid @RequestBody UserAuthenticate authenticate) {
         return ResponseEntity.ok(authService.authenticate(authenticate));
     }
 }

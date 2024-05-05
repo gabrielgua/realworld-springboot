@@ -1,8 +1,10 @@
 package com.gabrielgua.realworld.domain.service;
 
 import com.gabrielgua.realworld.api.security.AuthUtils;
-import com.gabrielgua.realworld.domain.exception.AlreadyTakenException;
+import com.gabrielgua.realworld.domain.exception.EmailTakenException;
+import com.gabrielgua.realworld.domain.exception.TakenException;
 import com.gabrielgua.realworld.domain.exception.EmailNotFoundException;
+import com.gabrielgua.realworld.domain.exception.UsernameTakenException;
 import com.gabrielgua.realworld.domain.model.Article;
 import com.gabrielgua.realworld.domain.model.Profile;
 import com.gabrielgua.realworld.domain.model.User;
@@ -29,7 +31,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User getByEmail(String email) {
-        return repository.findByEmail(email).orElseThrow(() -> new EmailNotFoundException(email));
+        return repository.findByEmail(email).orElseThrow(EmailNotFoundException::new);
     }
 
     @Transactional
@@ -49,11 +51,11 @@ public class UserService {
 
     private void checkUserAvailable(User user) {
         if (usernameTaken(user)) {
-            throw new AlreadyTakenException("Username");
+            throw new EmailTakenException();
         }
 
         if (emailTaken(user)) {
-            throw new AlreadyTakenException("Email");
+            throw new UsernameTakenException();
         }
     }
 

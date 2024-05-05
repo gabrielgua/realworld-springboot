@@ -1,10 +1,6 @@
 package com.gabrielgua.realworld.api.security;
 
-import com.gabrielgua.realworld.api.security.AuthProperties;
-import com.gabrielgua.realworld.domain.exception.EmailNotFoundException;
-import com.gabrielgua.realworld.domain.model.User;
 import com.gabrielgua.realworld.domain.repository.UserRepository;
-import com.gabrielgua.realworld.domain.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

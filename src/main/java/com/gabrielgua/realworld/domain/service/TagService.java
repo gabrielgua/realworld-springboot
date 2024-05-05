@@ -23,12 +23,12 @@ public class TagService {
 
     @Transactional
     public Tag getById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new TagNotFoundException(id));
+        return repository.findById(id).orElseThrow(TagNotFoundException::new);
     }
 
     @Transactional
     public Tag getByName(String name) {
-        return repository.findByName(name).orElseThrow(() -> new TagNotFoundException(name));
+        return repository.findByName(name).orElseThrow(TagNotFoundException::new);
     }
 
     @Transactional

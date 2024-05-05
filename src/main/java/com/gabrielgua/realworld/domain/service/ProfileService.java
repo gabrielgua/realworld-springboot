@@ -16,12 +16,12 @@ public class ProfileService {
 
     @Transactional(readOnly = true)
     public Profile getByUsername(String username) {
-        return repository.findByUsername(username).orElseThrow(() -> new ProfileNotFoundException(username));
+        return repository.findByUsername(username).orElseThrow(ProfileNotFoundException::new);
     }
 
     @Transactional(readOnly = true)
     public Profile getById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new ProfileNotFoundException(id));
+        return repository.findById(id).orElseThrow(ProfileNotFoundException::new);
     }
 
     @Transactional

@@ -16,21 +16,18 @@ import java.util.HashMap;
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse httpResponse, AuthenticationException authException) throws IOException, ServletException {
-        var response = new HashMap<>();
         var status = HttpStatus.UNAUTHORIZED;
         var error = Error.builder()
                 .message("Missing credentials or token invalid")
-                .status(status.value())
+                .status("error")
                 .build();
-
-        response.put("error", error);
 
 
         httpResponse.setStatus(status.value());
         httpResponse.setContentType("application/json");
         var out = httpResponse.getOutputStream();
         var mapper = new ObjectMapper();
-        mapper.writerWithDefaultPrettyPrinter().writeValue(out, response);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(out, error);
         out.flush();
     }
 }

@@ -1,6 +1,6 @@
 package com.gabrielgua.realworld.domain.service;
 
-import com.gabrielgua.realworld.domain.exception.ArticleAlreadyRegisteredException;
+import com.gabrielgua.realworld.domain.exception.ArticleNotUniqueException;
 import com.gabrielgua.realworld.domain.exception.ArticleNotFoundException;
 import com.gabrielgua.realworld.domain.model.Article;
 import com.gabrielgua.realworld.domain.model.Profile;
@@ -32,7 +32,7 @@ public class ArticleService {
 
     @Transactional(readOnly = true)
     public Article getBySlug(String slug) {
-        return repository.findBySlug(slug).orElseThrow(() -> new ArticleNotFoundException(slug));
+        return repository.findBySlug(slug).orElseThrow(ArticleNotFoundException::new);
     }
 
     @Transactional(readOnly = true)
@@ -89,6 +89,6 @@ public class ArticleService {
     }
 
     private void checkSlugAvailability(String slug, Article article) {
-        if (slugTaken(slug, article)) throw new ArticleAlreadyRegisteredException(slug);
+        if (slugTaken(slug, article)) throw new ArticleNotUniqueException();
     }
 }
