@@ -2,6 +2,7 @@ package com.gabrielgua.realworld.api.controller;
 
 import com.gabrielgua.realworld.api.assembler.ArticleAssembler;
 import com.gabrielgua.realworld.api.model.ArticleResponse;
+import com.gabrielgua.realworld.api.security.authorization.CheckSecurity;
 import com.gabrielgua.realworld.domain.service.ArticleService;
 import com.gabrielgua.realworld.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ public class ArticleFavoriteController {
     private final ArticleAssembler articleAssembler;
 
     @PostMapping("/favorite")
+    @CheckSecurity.Protected.canManage
     public ArticleResponse favoriteArticle(@PathVariable String slug) {
         var article = articleService.getBySlug(slug);
         var user = userService.getCurrentUser();
@@ -27,6 +29,7 @@ public class ArticleFavoriteController {
     }
 
     @DeleteMapping("/favorite")
+    @CheckSecurity.Protected.canManage
     public ArticleResponse unfavoriteArticle(@PathVariable String slug) {
         var article = articleService.getBySlug(slug);
         var user = userService.getCurrentUser();

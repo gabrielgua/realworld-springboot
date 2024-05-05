@@ -9,17 +9,22 @@ import java.lang.annotation.Target;
 
 public @interface CheckSecurity {
 
-    public @interface Default {
+    public @interface Public {
 
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         @PreAuthorize("permitAll()")
         public @interface canRead {}
 
+
+    }
+
+    public @interface Protected {
+
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         @PreAuthorize("@authorizationConfig.isAuthenticated")
-        public @interface canWrite {}
+        public @interface canManage {}
     }
 
     public @interface Articles {

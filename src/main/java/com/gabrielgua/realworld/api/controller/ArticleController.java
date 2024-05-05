@@ -42,6 +42,7 @@ public class ArticleController {
     }
 
     @GetMapping
+    @CheckSecurity.Public.canRead
     public ArticleListResponse getAll(
             WebRequest request,
             ArticleSpecification filter,
@@ -61,6 +62,7 @@ public class ArticleController {
     }
 
     @GetMapping("/feed")
+    @CheckSecurity.Public.canRead
     public ArticleListResponse getFeed(
             @RequestParam(required = false, defaultValue = DEFAULT_FILTER_LIMIT) int limit,
             @RequestParam(required = false, defaultValue = DEFAULT_FILTER_OFFSET) int offset
@@ -74,6 +76,7 @@ public class ArticleController {
     }
 
     @GetMapping("/{slug}")
+    @CheckSecurity.Public.canRead
     public ArticleResponse getBySlug(@PathVariable String slug, WebRequest request) {
         var article = articleService.getBySlug(slug);
         if (!hasAuthorizationHeader(request)) {
@@ -86,7 +89,7 @@ public class ArticleController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @CheckSecurity.Default.canWrite
+    @CheckSecurity.Protected.canManage
     public ArticleResponse save(@RequestBody ArticleRegister register) {
         var user = userService.getCurrentUser();
 

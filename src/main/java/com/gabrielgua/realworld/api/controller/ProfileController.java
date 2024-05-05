@@ -22,7 +22,7 @@ public class ProfileController {
     private final AuthUtils authUtils;
 
     @GetMapping("/{username}")
-    @CheckSecurity.Default.canRead
+    @CheckSecurity.Public.canRead
     public ProfileResponse getByUsername(@PathVariable String username, WebRequest request) {
         if (request.getHeader(HttpHeaders.AUTHORIZATION) == null) {
             return profileAssembler.toResponse(profileService.getByUsername(username));
@@ -33,6 +33,7 @@ public class ProfileController {
     }
 
     @PostMapping("/{username}/follow")
+    @CheckSecurity.Protected.canManage
     public ProfileResponse followProfile(@PathVariable String username) {
         var profile = profileService.getByUsername(username);
         var user = userService.getByEmail(authUtils.getCurrentUserEmail());
@@ -42,6 +43,7 @@ public class ProfileController {
     }
 
     @DeleteMapping("/{username}/follow")
+    @CheckSecurity.Protected.canManage
     public ProfileResponse unfollowProfile(@PathVariable String username) {
         var profile = profileService.getByUsername(username);
         var user = userService.getByEmail(authUtils.getCurrentUserEmail());
