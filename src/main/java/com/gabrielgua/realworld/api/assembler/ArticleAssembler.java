@@ -1,5 +1,6 @@
 package com.gabrielgua.realworld.api.assembler;
 
+import com.gabrielgua.realworld.api.model.ArticleListResponse;
 import com.gabrielgua.realworld.api.model.ArticleRegister;
 import com.gabrielgua.realworld.api.model.ArticleResponse;
 import com.gabrielgua.realworld.api.model.ArticleUpdate;
@@ -44,17 +45,34 @@ public class ArticleAssembler {
         return response;
     }
 
-    public List<ArticleResponse> toCollectionModel(List<Article> articles) {
-        return articles.stream()
+    public ArticleListResponse toCollectionModel(List<Article> articles) {
+
+        var content = articles.stream()
                 .map(this::toResponse)
                 .toList();
+
+        var articlesCount = content.size();
+
+        return ArticleListResponse.builder()
+                .articles(content)
+                .articlesCount(articlesCount)
+                .build();
     }
 
-    public List<ArticleResponse> toCollectionModel(User user, List<Article> articles) {
-        return articles.stream()
+    public ArticleListResponse toCollectionModel(User user, List<Article> articles) {
+
+        var content = articles.stream()
                 .map(a -> toResponse(user, a))
                 .toList();
+
+        var articlesCount = content.size();
+
+        return ArticleListResponse.builder()
+                .articles(content)
+                .articlesCount(articlesCount)
+                .build();
     }
+
 
     public Article toEntity(ArticleRegister register) {
         return modelMapper.map(register, Article.class);

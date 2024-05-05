@@ -1,6 +1,7 @@
 package com.gabrielgua.realworld.api.controller;
 
 import com.gabrielgua.realworld.api.assembler.ArticleAssembler;
+import com.gabrielgua.realworld.api.model.ArticleListResponse;
 import com.gabrielgua.realworld.api.model.ArticleRegister;
 import com.gabrielgua.realworld.api.model.ArticleResponse;
 import com.gabrielgua.realworld.api.model.ArticleUpdate;
@@ -41,7 +42,7 @@ public class ArticleController {
     }
 
     @GetMapping
-    public List<ArticleResponse> getAll(
+    public ArticleListResponse getAll(
             WebRequest request,
             ArticleSpecification filter,
             @RequestParam(required = false, defaultValue = DEFAULT_FILTER_LIMIT) int limit,
@@ -60,7 +61,7 @@ public class ArticleController {
     }
 
     @GetMapping("/feed")
-    public List<ArticleResponse> getFeed(
+    public ArticleListResponse getFeed(
             @RequestParam(required = false, defaultValue = DEFAULT_FILTER_LIMIT) int limit,
             @RequestParam(required = false, defaultValue = DEFAULT_FILTER_OFFSET) int offset
     ) {
