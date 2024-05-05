@@ -31,8 +31,13 @@ public class SecurityConfig {
 
     private static final String[] PUBLIC_READ_ENDPOINTS = {
             "/error",
+            "/tags",
             "/profiles", "/profiles/*",
             "/articles", "/articles/*"
+    };
+
+    private static final String[] PUBLIC_WRITE_ENDPOINTS = {
+            "/users", "/users/login"
     };
 
     @Bean
@@ -42,8 +47,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, PUBLIC_WRITE_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.GET, PUBLIC_READ_ENDPOINTS).permitAll()
                         .anyRequest().authenticated()
                 )

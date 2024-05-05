@@ -22,16 +22,6 @@ public class TagService {
     }
 
     @Transactional
-    public Tag getById(Long id) {
-        return repository.findById(id).orElseThrow(TagNotFoundException::new);
-    }
-
-    @Transactional
-    public Tag getByName(String name) {
-        return repository.findByName(name).orElseThrow(TagNotFoundException::new);
-    }
-
-    @Transactional
     public Tag save(Tag tag) {
         var existingTag = repository.findByName(tag.getName());
         return existingTag.map(repository::save).orElseGet(() -> repository.save(tag));
@@ -50,9 +40,5 @@ public class TagService {
         return Tag.builder()
                 .name(name)
                 .build();
-    }
-
-    private boolean existsByName(String name) {
-        return repository.existsByName(name);
     }
 }
