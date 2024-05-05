@@ -27,7 +27,7 @@ public @interface CheckSecurity {
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
         @PreAuthorize("@authorizationConfig.isAuthor(#slug)")
-        public @interface canManageArticles {}
+        public @interface canManage {}
 
 
     }

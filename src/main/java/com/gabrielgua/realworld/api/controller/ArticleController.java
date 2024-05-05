@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -101,12 +99,12 @@ public class ArticleController {
     }
 
     @PutMapping("/{slug}")
-    @CheckSecurity.Articles.canManageArticles
+    @CheckSecurity.Articles.canManage
     public ArticleResponse update(@PathVariable String slug, @RequestBody ArticleUpdate update) {
         var article = articleService.getBySlug(slug);
         articleAssembler.copyToEntity(update, article);
 
-        return articleAssembler.toResponse(article);
+        return articleAssembler.toResponse(articleService.save(article, article.getAuthor(), article.getTagList().stream().toList()));
     }
 
 }

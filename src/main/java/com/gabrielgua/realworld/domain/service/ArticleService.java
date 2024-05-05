@@ -46,12 +46,30 @@ public class ArticleService {
     public Article save(Article article, Profile profile, List<Tag> tags) {
         var slug = slg.slugify(article.getTitle());
 
-        checkSlugAvailability(slug);
+        checkSlugAvailability(slug, article);
+
+        if (article.getId() == null) {
+            addAllTags(article, tags);
+            article.setAuthor(profile);
+        }
 
         article.setSlug(slug);
-        addAllTags(article, tags);
-        article.setAuthor(profile);
         return repository.save(article);
+    }
+
+//    @Transactional
+//    public Article update(Article article) {
+//        var slug = slg.slugify(article.getTitle());
+//
+//        article.setSlug(slug);
+//        checkSlugAvailability(article);
+//    }
+
+
+
+    private boolean slugTaken(String slug, Article article) {
+        var existingArticle = repository.findBySlug(slug);
+        return existingArticle.isPresent() && !existingArticle.get().equals(article);
     }
 
     @Transactional
@@ -66,10 +84,8 @@ public class ArticleService {
         return repository.save(article);
     }
 
-    private void checkSlugAvailability(String slug) {
-        if (repository.existsBySlug(slug)) {
-            throw new ArticleAlreadyRegisteredException(slug);
-        }
+    private void checkSlugAvailability(String slug, Article article) {
+        if (slugTaken(slug, article)) throw new ArticleAlreadyRegisteredException(slug);
     }
 
     private void addAllTags(Article article, List<Tag> tags) {
