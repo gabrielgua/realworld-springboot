@@ -4,7 +4,7 @@ import com.gabrielgua.realworld.api.model.comment.CommentWrapper;
 import com.gabrielgua.realworld.api.model.comment.CommentRegister;
 import com.gabrielgua.realworld.api.model.comment.CommentResponse;
 import com.gabrielgua.realworld.domain.model.Comment;
-import com.gabrielgua.realworld.domain.model.User;
+import com.gabrielgua.realworld.domain.model.Profile;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -21,10 +21,10 @@ public class CommentAssembler {
         return modelMapper.map(comment, CommentResponse.class);
     }
 
-    public CommentResponse toResponse(User user, Comment comment) {
+    public CommentResponse toResponse(Profile profile, Comment comment) {
         var response = toResponse(comment);
 
-        if (user.getFollowing().contains(comment.getAuthor())) {
+        if (profile.getProfiles().contains(comment.getAuthor())) {
             response.getAuthor().setFollowing(true);
         }
 
@@ -39,9 +39,9 @@ public class CommentAssembler {
         return buildResponse(content);
     }
 
-    public CommentWrapper toCollectionResponse(User user, List<Comment> comments) {
+    public CommentWrapper toCollectionResponse(Profile profile, List<Comment> comments) {
         var content = comments.stream()
-                .map(c -> toResponse(user, c))
+                .map(c -> toResponse(profile, c))
                 .toList();
 
         return buildResponse(content);

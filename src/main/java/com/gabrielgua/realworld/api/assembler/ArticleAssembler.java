@@ -5,8 +5,8 @@ import com.gabrielgua.realworld.api.model.article.ArticleRegister;
 import com.gabrielgua.realworld.api.model.article.ArticleResponse;
 import com.gabrielgua.realworld.api.model.article.ArticleUpdate;
 import com.gabrielgua.realworld.domain.model.Article;
+import com.gabrielgua.realworld.domain.model.Profile;
 import com.gabrielgua.realworld.domain.model.Tag;
-import com.gabrielgua.realworld.domain.model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,14 +30,14 @@ public class ArticleAssembler {
         return response;
     }
 
-    public ArticleResponse toResponse(User user, Article article) {
+    public ArticleResponse toResponse(Profile profile, Article article) {
         var response = toResponse(article);
 
-        if (user.getFollowing().contains(article.getAuthor())) {
+        if (profile.getProfiles().contains(article.getAuthor())) {
             response.getAuthor().setFollowing(true);
         }
 
-        if (article.getFavorites().contains(user)) {
+        if (article.getFavorites().contains(profile.getUser())) {
             response.setFavorited(true);
         }
 
@@ -53,10 +53,10 @@ public class ArticleAssembler {
         return buildResponse(content);
     }
 
-    public ArticleWrapper toCollectionModel(User user, List<Article> articles) {
+    public ArticleWrapper toCollectionModel(Profile profile, List<Article> articles) {
 
         var content = articles.stream()
-                .map(a -> toResponse(user, a))
+                .map(a -> toResponse(profile, a))
                 .toList();
 
         return buildResponse(content);

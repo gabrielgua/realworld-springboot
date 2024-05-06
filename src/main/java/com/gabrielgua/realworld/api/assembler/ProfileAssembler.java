@@ -3,7 +3,6 @@ package com.gabrielgua.realworld.api.assembler;
 import com.gabrielgua.realworld.api.model.profile.ProfileResponse;
 import com.gabrielgua.realworld.api.security.AuthUtils;
 import com.gabrielgua.realworld.domain.model.Profile;
-import com.gabrielgua.realworld.domain.model.User;
 import com.gabrielgua.realworld.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,10 +23,10 @@ public class ProfileAssembler {
         return modelMapper.map(profile, ProfileResponse.class);
     }
 
-    public ProfileResponse toResponse(User user, Profile profile) {
+    public ProfileResponse toResponse(Profile current, Profile profile) {
         var response = modelMapper.map(profile, ProfileResponse.class);
 
-        if (user.getFollowing().contains(profile)) {
+        if (current.getProfiles().contains(profile)) {
             response.setFollowing(true);
         }
         return response;

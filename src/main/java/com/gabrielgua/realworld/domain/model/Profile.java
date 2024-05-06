@@ -3,6 +3,7 @@ package com.gabrielgua.realworld.domain.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,4 +29,20 @@ public class Profile {
     private String username;
     private String bio;
     private String image;
+
+    @ManyToMany
+    @JoinTable(
+            name = "profiles_following",
+            joinColumns = @JoinColumn(name = "profile_id"),
+            inverseJoinColumns = @JoinColumn(name = "following_id")
+    )
+    private Set<Profile> profiles = new HashSet<>();
+
+    public void followProfile(Profile profile) {
+        getProfiles().add(profile);
+    }
+
+    public void unfollowProfile(Profile profile) {
+        getProfiles().remove(profile);
+    }
 }

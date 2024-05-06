@@ -76,18 +76,6 @@ public class UserService {
     }
 
     @Transactional
-    public void follow(User user, Profile profile) {
-        user.followProfile(profile);
-        repository.save(user);
-    }
-
-    @Transactional
-    public void unfollow(User user, Profile profile) {
-        user.unfollowProfile(profile);
-        repository.save(user);
-    }
-
-    @Transactional
     public User favorite(User user, Article article) {
         user.favoriteArticle(article);
         return repository.save(user);

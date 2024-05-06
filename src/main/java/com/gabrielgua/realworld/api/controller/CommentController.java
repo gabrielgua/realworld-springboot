@@ -31,8 +31,8 @@ public class CommentController {
         var article = articleService.getBySlug(slug);
 
         if (authUtils.isAuthenticated()) {
-            var user = userService.getCurrentUser();
-            return commentAssembler.toCollectionResponse(user, commentService.getAllByArticle(article));
+            var profile = userService.getCurrentUser().getProfile();
+            return commentAssembler.toCollectionResponse(profile, commentService.getAllByArticle(article));
         }
 
 

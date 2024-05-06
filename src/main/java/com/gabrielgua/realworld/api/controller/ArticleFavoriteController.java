@@ -4,6 +4,7 @@ import com.gabrielgua.realworld.api.assembler.ArticleAssembler;
 import com.gabrielgua.realworld.api.model.article.ArticleResponse;
 import com.gabrielgua.realworld.api.security.authorization.CheckSecurity;
 import com.gabrielgua.realworld.domain.service.ArticleService;
+import com.gabrielgua.realworld.domain.service.ProfileService;
 import com.gabrielgua.realworld.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class ArticleFavoriteController {
 
     private final UserService userService;
+    private final ProfileService profileService;
     private final ArticleService articleService;
     private final ArticleAssembler articleAssembler;
 
@@ -21,11 +23,11 @@ public class ArticleFavoriteController {
     @CheckSecurity.Protected.canManage
     public ArticleResponse favoriteArticle(@PathVariable String slug) {
         var article = articleService.getBySlug(slug);
-        var user = userService.getCurrentUser();
+        var profile = userService.getCurrentUser();
 
-        user = userService.favorite(user, article);
-        article = articleService.userFavorited(user, article);
-        return articleAssembler.toResponse(user, article);
+        profile = userService.favorite(profile, article);
+        article = articleService.userFavorited(profile, article);
+        return articleAssembler.toResponse(article);
     }
 
     @DeleteMapping("/favorite")
@@ -36,6 +38,6 @@ public class ArticleFavoriteController {
 
         user = userService.unfavorite(user, article);
         article = articleService.userUnfavorited(user, article);
-        return articleAssembler.toResponse(user, article);
+        return articleAssembler.toResponse(article);
     }
 }

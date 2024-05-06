@@ -7,7 +7,8 @@ delete from articles;
 delete from comments;
 delete from articles_tags;
 delete from users_articles;
-delete from users_following;
+delete from profiles_following;
+
 
 set foreign_key_checks = 1;
 

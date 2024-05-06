@@ -24,31 +24,31 @@ public class ProfileController {
     @GetMapping("/{username}")
     @CheckSecurity.Public.canRead
     public ProfileResponse getByUsername(@PathVariable String username, WebRequest request) {
-        if (request.getHeader(HttpHeaders.AUTHORIZATION) == null) {
-            return profileAssembler.toResponse(profileService.getByUsername(username));
+        if (authUtils.isAuthenticated()) {
+            var currentUser = userService.getCurrentUser().getProfile();
+            return profileAssembler.toResponse(currentUser, profileService.getByUsername(username));
         }
 
-        var user = userService.getByEmail(authUtils.getCurrentUserEmail());
-        return profileAssembler.toResponse(user, profileService.getByUsername(username));
+        return profileAssembler.toResponse(profileService.getByUsername(username));
     }
 
     @PostMapping("/{username}/follow")
     @CheckSecurity.Protected.canManage
     public ProfileResponse followProfile(@PathVariable String username) {
-        var profile = profileService.getByUsername(username);
-        var user = userService.getByEmail(authUtils.getCurrentUserEmail());
+        var toFollow = profileService.getByUsername(username);
+        var current = userService.getCurrentUser().getProfile();
 
-        userService.follow(user, profile);
-        return profileAssembler.toResponse(user, profile);
+        profileService.follow(current, toFollow);
+        return profileAssembler.toResponse(current, toFollow);
     }
 
     @DeleteMapping("/{username}/follow")
     @CheckSecurity.Protected.canManage
     public ProfileResponse unfollowProfile(@PathVariable String username) {
-        var profile = profileService.getByUsername(username);
-        var user = userService.getByEmail(authUtils.getCurrentUserEmail());
+        var toFollow = profileService.getByUsername(username);
+        var current = userService.getCurrentUser().getProfile();
 
-        userService.unfollow(user, profile);
-        return profileAssembler.toResponse(user, profile);
+        profileService.unfollow(current, toFollow);
+        return profileAssembler.toResponse(current, toFollow);
     }
 }

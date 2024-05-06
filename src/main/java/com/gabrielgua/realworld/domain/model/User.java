@@ -25,18 +25,9 @@ public class User {
     private String image;
     private String password;
 
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Profile profile;
-
-    @ManyToMany
-    @JoinTable(
-            name = "users_following",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "profile_id")
-    )
-    private Set<Profile> following = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -45,14 +36,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "article_id")
     )
     private Set<Article> favoritedArticles = new HashSet<>();
-
-    public void followProfile(Profile profile) {
-        getFollowing().add(profile);
-    }
-
-    public void unfollowProfile(Profile profile) {
-        getFollowing().remove(profile);
-    }
 
     public void favoriteArticle(Article article) {
         getFavoritedArticles().add(article);

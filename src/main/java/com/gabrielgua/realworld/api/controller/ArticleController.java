@@ -48,8 +48,8 @@ public class ArticleController {
         var articles = articleService.listAll(filter, pageable).getContent();
 
         if (authUtils.isAuthenticated()) {
-            var user = userService.getCurrentUser();
-            return articleAssembler.toCollectionModel(user, articles);
+            var profile = userService.getCurrentUser().getProfile();
+            return articleAssembler.toCollectionModel(profile, articles);
         }
 
         return articleAssembler.toCollectionModel(articles);
@@ -62,11 +62,11 @@ public class ArticleController {
             @RequestParam(required = false, defaultValue = DEFAULT_FILTER_OFFSET) int offset
     ) {
 
-        var user = userService.getCurrentUser();
+        var profile = userService.getCurrentUser().getProfile();
         Pageable pageable = PageRequest.of(offset, limit, DEFAULT_FILTER_SORT);
-        var articles = articleService.getFeedByUser(user, pageable);
+        var articles = articleService.getFeedByUser(profile, pageable);
 
-        return articleAssembler.toCollectionModel(user, articles);
+        return articleAssembler.toCollectionModel(profile, articles);
     }
 
 
@@ -76,8 +76,8 @@ public class ArticleController {
         var article = articleService.getBySlug(slug);
 
         if (authUtils.isAuthenticated()) {
-            var user = userService.getCurrentUser();
-            return articleAssembler.toResponse(user, article);
+            var profile = userService.getCurrentUser().getProfile();
+            return articleAssembler.toResponse(profile, article);
         }
 
         return articleAssembler.toResponse(article);
@@ -87,7 +87,7 @@ public class ArticleController {
     @ResponseStatus(HttpStatus.CREATED)
     @CheckSecurity.Protected.canManage
     public ArticleResponse save(@RequestBody ArticleRegister register) {
-        var user = userService.getCurrentUser();
+        var profile = userService.getCurrentUser().getProfile();
 
         List<Tag> tags = new ArrayList<>();
         if (register.getTagList() != null) {
@@ -95,7 +95,7 @@ public class ArticleController {
         }
 
         var article = articleAssembler.toEntity(register);
-        return articleAssembler.toResponse(user, articleService.save(article, user.getProfile(), tags));
+        return articleAssembler.toResponse(profile, articleService.save(article, profile, tags));
     }
 
     @PutMapping("/{slug}")

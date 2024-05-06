@@ -36,8 +36,8 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public List<Article> getFeedByUser(User user, Pageable pageable) {
-        List<User> followedUsers = user.getFollowing().stream().map(Profile::getUser).toList();
+    public List<Article> getFeedByUser(Profile profile, Pageable pageable) {
+        List<User> followedUsers = profile.getProfiles().stream().map(Profile::getUser).toList();
 
         return repository.findAllByAuthorIn(followedUsers, pageable);
     }
