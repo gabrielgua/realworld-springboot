@@ -6,7 +6,7 @@ delete from profiles;
 delete from articles;
 delete from comments;
 delete from articles_tags;
-delete from users_articles;
+delete from profiles_articles;
 delete from profiles_following;
 
 

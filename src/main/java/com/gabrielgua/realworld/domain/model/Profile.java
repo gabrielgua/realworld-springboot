@@ -38,11 +38,27 @@ public class Profile {
     )
     private Set<Profile> profiles = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "profiles_articles",
+            joinColumns = @JoinColumn(name = "profile_id"),
+            inverseJoinColumns = @JoinColumn(name = "article_id")
+    )
+    private Set<Article> articles = new HashSet<>();
+
     public void followProfile(Profile profile) {
         getProfiles().add(profile);
     }
 
     public void unfollowProfile(Profile profile) {
         getProfiles().remove(profile);
+    }
+
+    public void favoriteArticle(Article article) {
+        getArticles().add(article);
+    }
+
+    public void unfavoriteArticle(Article article) {
+        getArticles().remove(article);
     }
 }

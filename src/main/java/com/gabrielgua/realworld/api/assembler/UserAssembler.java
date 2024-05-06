@@ -4,17 +4,17 @@ import com.gabrielgua.realworld.api.model.user.UserRegister;
 import com.gabrielgua.realworld.api.model.user.UserResponse;
 import com.gabrielgua.realworld.api.model.user.UserUpdate;
 import com.gabrielgua.realworld.domain.model.User;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class UserAssembler {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     public UserResponse toResponse(User user) {
         return modelMapper.map(user, UserResponse.class);

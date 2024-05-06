@@ -7,17 +7,17 @@ import com.gabrielgua.realworld.api.model.article.ArticleUpdate;
 import com.gabrielgua.realworld.domain.model.Article;
 import com.gabrielgua.realworld.domain.model.Profile;
 import com.gabrielgua.realworld.domain.model.Tag;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class ArticleAssembler {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     public void copyToEntity(ArticleUpdate update, Article article) {
         modelMapper.map(update, article);
@@ -37,7 +37,7 @@ public class ArticleAssembler {
             response.getAuthor().setFollowing(true);
         }
 
-        if (article.getFavorites().contains(profile.getUser())) {
+        if (article.getFavorites().contains(profile)) {
             response.setFavorited(true);
         }
 

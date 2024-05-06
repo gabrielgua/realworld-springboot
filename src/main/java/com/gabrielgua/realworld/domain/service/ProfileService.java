@@ -1,6 +1,7 @@
 package com.gabrielgua.realworld.domain.service;
 
 import com.gabrielgua.realworld.domain.exception.ProfileNotFoundException;
+import com.gabrielgua.realworld.domain.model.Article;
 import com.gabrielgua.realworld.domain.model.Profile;
 import com.gabrielgua.realworld.domain.model.User;
 import com.gabrielgua.realworld.domain.repository.ProfileRepository;
@@ -61,5 +62,17 @@ public class ProfileService {
     public void unfollow(Profile current, Profile toFollow) {
         current.unfollowProfile(toFollow);
         profileRepository.save(current);
+    }
+
+    @Transactional
+    public Profile favorite(Profile profile, Article article) {
+        profile.favoriteArticle(article);
+        return profileRepository.save(profile);
+    }
+
+    @Transactional
+    public Profile unfavorite(Profile profile, Article article) {
+        profile.unfavoriteArticle(article);
+        return profileRepository.save(profile);
     }
 }

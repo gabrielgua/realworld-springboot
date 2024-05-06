@@ -2,14 +2,11 @@ package com.gabrielgua.realworld.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.ToString;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -37,8 +34,8 @@ public class Article {
     @JoinColumn(name = "author_id")
     private Profile author;
 
-    @ManyToMany(mappedBy = "favoritedArticles", cascade = CascadeType.DETACH)
-    private Set<User> favorites = new HashSet<>();
+    @ManyToMany(mappedBy = "articles", cascade = CascadeType.DETACH)
+    private Set<Profile> favorites = new HashSet<>();
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
     private Set<Comment> comments = new HashSet<>();
@@ -52,8 +49,6 @@ public class Article {
     private OffsetDateTime updatedAt;
 
 
-
-
     public void addTag(Tag tag) {
         getTagList().add(tag);
     }
@@ -62,13 +57,13 @@ public class Article {
         setFavoritesCount(getFavorites().size());
     }
 
-    public void addFavorite(User user) {
-        getFavorites().add(user);
+    public void addFavorite(Profile profile) {
+        getFavorites().add(profile);
         updateFavoritedCount();
     }
 
-    public void removeFavorite(User user) {
-        getFavorites().remove(user);
+    public void removeFavorite(Profile profile) {
+        getFavorites().remove(profile);
         updateFavoritedCount();
     }
 }

@@ -1,8 +1,8 @@
 package com.gabrielgua.realworld.api.assembler;
 
-import com.gabrielgua.realworld.api.model.comment.CommentWrapper;
 import com.gabrielgua.realworld.api.model.comment.CommentRegister;
 import com.gabrielgua.realworld.api.model.comment.CommentResponse;
+import com.gabrielgua.realworld.api.model.comment.CommentWrapper;
 import com.gabrielgua.realworld.domain.model.Comment;
 import com.gabrielgua.realworld.domain.model.Profile;
 import lombok.RequiredArgsConstructor;

@@ -10,11 +10,11 @@ import org.springframework.data.jpa.domain.Specification;
 
 @Join(path = "author", alias = "author")
 @Join(path = "tagList", alias = "tags")
-@Join(path = "favorites", alias = "profiles")
+@Join(path = "favorites", alias = "fav")
 @And({
         @Spec(path = "author.username", params = "author", spec = Like.class),
         @Spec(path = "tags.name", params = "tag", spec = In.class),
-        @Spec(path = "profiles.username", params = "favorited", spec = In.class)
+        @Spec(path = "fav.username", params = "favorited", spec = In.class)
 })
 public interface ArticleSpecification extends Specification<Article> {
 }

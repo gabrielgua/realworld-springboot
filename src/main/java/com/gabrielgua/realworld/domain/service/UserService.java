@@ -74,16 +74,4 @@ public class UserService {
         user.setToken(token);
         repository.save(user);
     }
-
-    @Transactional
-    public User favorite(User user, Article article) {
-        user.favoriteArticle(article);
-        return repository.save(user);
-    }
-
-    @Transactional
-    public User unfavorite(User user, Article article) {
-        user.unfavoriteArticle(article);
-        return repository.save(user);
-    }
 }

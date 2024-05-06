@@ -23,21 +23,21 @@ public class ArticleFavoriteController {
     @CheckSecurity.Protected.canManage
     public ArticleResponse favoriteArticle(@PathVariable String slug) {
         var article = articleService.getBySlug(slug);
-        var profile = userService.getCurrentUser();
+        var profile = userService.getCurrentUser().getProfile();
 
-        profile = userService.favorite(profile, article);
-        article = articleService.userFavorited(profile, article);
-        return articleAssembler.toResponse(article);
+        profile = profileService.favorite(profile, article);
+        article = articleService.profileFavorited(profile, article);
+        return articleAssembler.toResponse(profile, article);
     }
 
     @DeleteMapping("/favorite")
     @CheckSecurity.Protected.canManage
     public ArticleResponse unfavoriteArticle(@PathVariable String slug) {
         var article = articleService.getBySlug(slug);
-        var user = userService.getCurrentUser();
+        var profile = userService.getCurrentUser().getProfile();
 
-        user = userService.unfavorite(user, article);
-        article = articleService.userUnfavorited(user, article);
-        return articleAssembler.toResponse(article);
+        profile = profileService.unfavorite(profile, article);
+        article = articleService.profileUnfavorited(profile, article);
+        return articleAssembler.toResponse(profile, article);
     }
 }

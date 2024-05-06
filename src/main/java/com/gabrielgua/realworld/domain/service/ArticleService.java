@@ -55,6 +55,7 @@ public class ArticleService {
         checkSlugAvailability(slug, article);
         article.setSlug(slug);
 
+
         return repository.save(article);
     }
 
@@ -67,14 +68,14 @@ public class ArticleService {
     }
 
     @Transactional
-    public Article userFavorited(User user, Article article) {
-        article.addFavorite(user);
+    public Article profileFavorited(Profile profile, Article article) {
+        article.addFavorite(profile);
         return repository.save(article);
     }
 
     @Transactional
-    public Article userUnfavorited(User user, Article article) {
-        article.removeFavorite(user);
+    public Article profileUnfavorited(Profile profile, Article article) {
+        article.removeFavorite(profile);
         return repository.save(article);
     }
 

@@ -12,12 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ProfileAssembler {
-
-    private final AuthUtils authUtils;
-    private final UserService userService;
-
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     public ProfileResponse toResponse(Profile profile) {
         return modelMapper.map(profile, ProfileResponse.class);
