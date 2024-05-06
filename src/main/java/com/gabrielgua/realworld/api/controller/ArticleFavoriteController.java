@@ -1,7 +1,7 @@
 package com.gabrielgua.realworld.api.controller;
 
 import com.gabrielgua.realworld.api.assembler.ArticleAssembler;
-import com.gabrielgua.realworld.api.model.ArticleResponse;
+import com.gabrielgua.realworld.api.model.article.ArticleResponse;
 import com.gabrielgua.realworld.api.security.authorization.CheckSecurity;
 import com.gabrielgua.realworld.domain.service.ArticleService;
 import com.gabrielgua.realworld.domain.service.UserService;

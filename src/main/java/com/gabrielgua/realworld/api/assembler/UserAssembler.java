@@ -1,10 +1,8 @@
 package com.gabrielgua.realworld.api.assembler;
 
-import com.gabrielgua.realworld.api.model.UserAuthenticate;
-import com.gabrielgua.realworld.api.model.UserRegister;
-import com.gabrielgua.realworld.api.model.UserResponse;
-import com.gabrielgua.realworld.api.model.UserUpdate;
-import com.gabrielgua.realworld.domain.model.Profile;
+import com.gabrielgua.realworld.api.model.user.UserRegister;
+import com.gabrielgua.realworld.api.model.user.UserResponse;
+import com.gabrielgua.realworld.api.model.user.UserUpdate;
 import com.gabrielgua.realworld.domain.model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -33,7 +33,7 @@ public class SecurityConfig {
             "/error",
             "/tags",
             "/profiles", "/profiles/*",
-            "/articles", "/articles/*"
+            "/articles", "/articles/*", "/articles/**"
     };
 
     private static final String[] PUBLIC_WRITE_ENDPOINTS = {

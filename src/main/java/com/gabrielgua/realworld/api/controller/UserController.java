@@ -1,8 +1,8 @@
 package com.gabrielgua.realworld.api.controller;
 
 import com.gabrielgua.realworld.api.assembler.UserAssembler;
-import com.gabrielgua.realworld.api.model.UserResponse;
-import com.gabrielgua.realworld.api.model.UserUpdate;
+import com.gabrielgua.realworld.api.model.user.UserResponse;
+import com.gabrielgua.realworld.api.model.user.UserUpdate;
 import com.gabrielgua.realworld.api.security.authorization.CheckSecurity;
 import com.gabrielgua.realworld.domain.service.UserService;
 import lombok.RequiredArgsConstructor;

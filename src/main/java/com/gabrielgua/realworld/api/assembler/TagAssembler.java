@@ -1,6 +1,6 @@
 package com.gabrielgua.realworld.api.assembler;
 
-import com.gabrielgua.realworld.api.model.TagListResponse;
+import com.gabrielgua.realworld.api.model.tag.TagListResponse;
 import com.gabrielgua.realworld.domain.model.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

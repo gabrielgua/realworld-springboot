@@ -1,6 +1,7 @@
-package com.gabrielgua.realworld.api.model;
+package com.gabrielgua.realworld.api.model.article;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.gabrielgua.realworld.api.model.BaseResponse;
 import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.Setter;

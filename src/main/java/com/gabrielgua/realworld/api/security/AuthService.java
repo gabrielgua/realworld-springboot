@@ -1,9 +1,9 @@
 package com.gabrielgua.realworld.api.security;
 
 import com.gabrielgua.realworld.api.assembler.UserAssembler;
-import com.gabrielgua.realworld.api.model.UserAuthenticate;
-import com.gabrielgua.realworld.api.model.UserResponse;
-import com.gabrielgua.realworld.api.model.UserToken;
+import com.gabrielgua.realworld.api.model.user.UserAuthenticate;
+import com.gabrielgua.realworld.api.model.user.UserResponse;
+import com.gabrielgua.realworld.api.model.user.UserToken;
 import com.gabrielgua.realworld.domain.model.User;
 import com.gabrielgua.realworld.domain.service.UserService;
 import lombok.RequiredArgsConstructor;

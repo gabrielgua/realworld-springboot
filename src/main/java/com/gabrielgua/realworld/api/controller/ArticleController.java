@@ -1,10 +1,11 @@
 package com.gabrielgua.realworld.api.controller;
 
 import com.gabrielgua.realworld.api.assembler.ArticleAssembler;
-import com.gabrielgua.realworld.api.model.ArticleListResponse;
-import com.gabrielgua.realworld.api.model.ArticleRegister;
-import com.gabrielgua.realworld.api.model.ArticleResponse;
-import com.gabrielgua.realworld.api.model.ArticleUpdate;
+import com.gabrielgua.realworld.api.model.article.ArticleWrapper;
+import com.gabrielgua.realworld.api.model.article.ArticleRegister;
+import com.gabrielgua.realworld.api.model.article.ArticleResponse;
+import com.gabrielgua.realworld.api.model.article.ArticleUpdate;
+import com.gabrielgua.realworld.api.security.AuthUtils;
 import com.gabrielgua.realworld.api.security.authorization.CheckSecurity;
 import com.gabrielgua.realworld.domain.model.Tag;
 import com.gabrielgua.realworld.domain.service.ArticleService;
@@ -15,10 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +27,7 @@ import java.util.List;
 @RequestMapping("/articles")
 public class ArticleController {
 
+    private final AuthUtils authUtils;
     private final TagService tagService;
     private final UserService userService;
     private final ArticleService articleService;
@@ -36,15 +36,9 @@ public class ArticleController {
     private static final String DEFAULT_FILTER_LIMIT = "20";
     private static final String DEFAULT_FILTER_OFFSET = "0";
     private static final Sort DEFAULT_FILTER_SORT = Sort.by(Sort.Direction.DESC, "createdAt");
-
-    private boolean hasAuthorizationHeader(WebRequest request) {
-        return request.getHeader(HttpHeaders.AUTHORIZATION) != null;
-    }
-
     @GetMapping
     @CheckSecurity.Public.canRead
-    public ArticleListResponse getAll(
-            WebRequest request,
+    public ArticleWrapper getAll(
             ArticleSpecification filter,
             @RequestParam(required = false, defaultValue = DEFAULT_FILTER_LIMIT) int limit,
             @RequestParam(required = false, defaultValue = DEFAULT_FILTER_OFFSET) int offset) {
@@ -53,17 +47,17 @@ public class ArticleController {
         Pageable pageable = PageRequest.of(offset, limit, DEFAULT_FILTER_SORT);
         var articles = articleService.listAll(filter, pageable).getContent();
 
-        if (!hasAuthorizationHeader(request)) {
-            return articleAssembler.toCollectionModel(articles);
+        if (authUtils.isAuthenticated()) {
+            var user = userService.getCurrentUser();
+            return articleAssembler.toCollectionModel(user, articles);
         }
 
-        var user = userService.getCurrentUser();
-        return articleAssembler.toCollectionModel(user, articles);
+        return articleAssembler.toCollectionModel(articles);
     }
 
     @GetMapping("/feed")
     @CheckSecurity.Public.canRead
-    public ArticleListResponse getFeed(
+    public ArticleWrapper getFeed(
             @RequestParam(required = false, defaultValue = DEFAULT_FILTER_LIMIT) int limit,
             @RequestParam(required = false, defaultValue = DEFAULT_FILTER_OFFSET) int offset
     ) {
@@ -75,16 +69,18 @@ public class ArticleController {
         return articleAssembler.toCollectionModel(user, articles);
     }
 
+
     @GetMapping("/{slug}")
     @CheckSecurity.Public.canRead
-    public ArticleResponse getBySlug(@PathVariable String slug, WebRequest request) {
+    public ArticleResponse getBySlug(@PathVariable String slug) {
         var article = articleService.getBySlug(slug);
-        if (!hasAuthorizationHeader(request)) {
-            return articleAssembler.toResponse(article);
+
+        if (authUtils.isAuthenticated()) {
+            var user = userService.getCurrentUser();
+            return articleAssembler.toResponse(user, article);
         }
 
-        var user = userService.getCurrentUser();
-        return articleAssembler.toResponse(user, article);
+        return articleAssembler.toResponse(article);
     }
 
     @PostMapping

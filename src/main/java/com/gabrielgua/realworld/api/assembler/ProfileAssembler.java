@@ -1,6 +1,6 @@
 package com.gabrielgua.realworld.api.assembler;
 
-import com.gabrielgua.realworld.api.model.ProfileResponse;
+import com.gabrielgua.realworld.api.model.profile.ProfileResponse;
 import com.gabrielgua.realworld.api.security.AuthUtils;
 import com.gabrielgua.realworld.domain.model.Profile;
 import com.gabrielgua.realworld.domain.model.User;

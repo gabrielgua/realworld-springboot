@@ -1,9 +1,9 @@
 package com.gabrielgua.realworld.api.assembler;
 
-import com.gabrielgua.realworld.api.model.ArticleListResponse;
-import com.gabrielgua.realworld.api.model.ArticleRegister;
-import com.gabrielgua.realworld.api.model.ArticleResponse;
-import com.gabrielgua.realworld.api.model.ArticleUpdate;
+import com.gabrielgua.realworld.api.model.article.ArticleWrapper;
+import com.gabrielgua.realworld.api.model.article.ArticleRegister;
+import com.gabrielgua.realworld.api.model.article.ArticleResponse;
+import com.gabrielgua.realworld.api.model.article.ArticleUpdate;
 import com.gabrielgua.realworld.domain.model.Article;
 import com.gabrielgua.realworld.domain.model.Tag;
 import com.gabrielgua.realworld.domain.model.User;
@@ -31,7 +31,7 @@ public class ArticleAssembler {
     }
 
     public ArticleResponse toResponse(User user, Article article) {
-        var response = modelMapper.map(article, ArticleResponse.class);
+        var response = toResponse(article);
 
         if (user.getFollowing().contains(article.getAuthor())) {
             response.getAuthor().setFollowing(true);
@@ -41,38 +41,33 @@ public class ArticleAssembler {
             response.setFavorited(true);
         }
 
-        response.setTagList(tagsToList(article.getTagList().stream().toList()));
         return response;
     }
 
-    public ArticleListResponse toCollectionModel(List<Article> articles) {
+    public ArticleWrapper toCollectionModel(List<Article> articles) {
 
         var content = articles.stream()
                 .map(this::toResponse)
                 .toList();
 
-        var articlesCount = content.size();
-
-        return ArticleListResponse.builder()
-                .articles(content)
-                .articlesCount(articlesCount)
-                .build();
+        return buildResponse(content);
     }
 
-    public ArticleListResponse toCollectionModel(User user, List<Article> articles) {
+    public ArticleWrapper toCollectionModel(User user, List<Article> articles) {
 
         var content = articles.stream()
                 .map(a -> toResponse(user, a))
                 .toList();
 
-        var articlesCount = content.size();
-
-        return ArticleListResponse.builder()
-                .articles(content)
-                .articlesCount(articlesCount)
-                .build();
+        return buildResponse(content);
     }
 
+    private ArticleWrapper buildResponse(List<ArticleResponse> articles) {
+        return ArticleWrapper.builder()
+                .articles(articles)
+                .articlesCount(articles.size())
+                .build();
+    }
 
     public Article toEntity(ArticleRegister register) {
         return modelMapper.map(register, Article.class);

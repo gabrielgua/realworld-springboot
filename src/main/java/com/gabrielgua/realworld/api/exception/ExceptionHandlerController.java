@@ -71,6 +71,11 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         return handleResourceNotFound(ex, request, "profile");
     }
 
+    @ExceptionHandler(CommentNotFoundException.class)
+    public ResponseEntity<?> handleCommentNotFound(CommentNotFoundException ex, WebRequest request) {
+        return handleResourceNotFound(ex, request, "comment");
+    }
+
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<?> handleBusiness(BusinessException ex, WebRequest request) {
         var status = HttpStatus.INTERNAL_SERVER_ERROR;

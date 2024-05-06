@@ -1,42 +1,53 @@
 package com.gabrielgua.realworld.api.security.authorization;
 
 import com.gabrielgua.realworld.api.security.AuthUtils;
-import com.gabrielgua.realworld.domain.model.User;
+import com.gabrielgua.realworld.domain.model.Profile;
 import com.gabrielgua.realworld.domain.service.ArticleService;
+import com.gabrielgua.realworld.domain.service.CommentService;
 import com.gabrielgua.realworld.domain.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class AuthorizationConfig {
 
-    @Autowired
-    private AuthUtils authUtils;
-
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private ArticleService articleService;
+    private final AuthUtils authUtils;
+    private final UserService userService;
+    private final ArticleService articleService;
+    private final CommentService commentService;
 
 
-    public boolean isAuthor(String slug) {
+    public boolean isArticleAuthor(String slug) {
         if (!isAuthenticated()) {
             return false;
         }
 
         var article = articleService.getBySlug(slug);
-        var user = article.getAuthor().getUser();
+        var author = article.getAuthor();
 
-        return authenticatedUserEquals(user);
+        return authenticatedUserEquals(author);
     }
 
-    private boolean authenticatedUserEquals(User user) {
-        return userService.getCurrentUser().equals(user);
+    public boolean isCommentAuthor(Long commentId) {
+        if (!isAuthenticated()) {
+            return false;
+        }
+
+        var comment = commentService.getById(commentId);
+        var author = comment.getAuthor();
+
+        return authenticatedUserEquals(author);
+    }
+
+    private boolean authenticatedUserEquals(Profile user) {
+        return userService.getCurrentUser().getProfile().equals(user);
     }
 
     public boolean isAuthenticated() {
         return authUtils.isAuthenticated();
     }
+
 
 
 

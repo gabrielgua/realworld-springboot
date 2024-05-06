@@ -40,6 +40,9 @@ public class Article {
     @ManyToMany(mappedBy = "favoritedArticles", cascade = CascadeType.DETACH)
     private Set<User> favorites = new HashSet<>();
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
+    private Set<Comment> comments = new HashSet<>();
+
     private int favoritesCount = 0;
 
     @CreationTimestamp
@@ -47,6 +50,9 @@ public class Article {
 
     @UpdateTimestamp
     private OffsetDateTime updatedAt;
+
+
+
 
     public void addTag(Tag tag) {
         getTagList().add(tag);

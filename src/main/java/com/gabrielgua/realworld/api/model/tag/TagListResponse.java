@@ -1,4 +1,4 @@
-package com.gabrielgua.realworld.api.model;
+package com.gabrielgua.realworld.api.model.tag;
 
 import lombok.Builder;
 import lombok.Getter;

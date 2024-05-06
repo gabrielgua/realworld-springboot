@@ -31,9 +31,15 @@ public @interface CheckSecurity {
 
         @Retention(RetentionPolicy.RUNTIME)
         @Target(ElementType.METHOD)
-        @PreAuthorize("@authorizationConfig.isAuthor(#slug)")
+        @PreAuthorize("@authorizationConfig.isArticleAuthor(#slug)")
         public @interface canManage {}
 
+    }
 
+    public @interface Comments {
+        @Retention(RetentionPolicy.RUNTIME)
+        @Target(ElementType.METHOD)
+        @PreAuthorize("@authorizationConfig.isCommentAuthor(#commentId)")
+        public @interface canDelete {}
     }
 }

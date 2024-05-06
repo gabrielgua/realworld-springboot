@@ -1,4 +1,4 @@
-package com.gabrielgua.realworld.api.model;
+package com.gabrielgua.realworld.api.model.user;
 
 
 import lombok.Builder;
