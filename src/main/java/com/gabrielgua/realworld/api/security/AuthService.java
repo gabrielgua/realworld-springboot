@@ -29,6 +29,8 @@ public class AuthService {
         return toUserResponse(user);
     }
 
+
+
     public UserResponse authenticate(UserAuthenticate authenticate) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authenticate.getEmail(), authenticate.getPassword())

@@ -16,8 +16,6 @@ public class UserController {
     private final UserService userService;
     private final UserAssembler userAssembler;
 
-
-
     @GetMapping
     @CheckSecurity.Protected.canManage
     public UserResponse getCurrentUser() {
@@ -30,7 +28,7 @@ public class UserController {
     public UserResponse updateCurrentUser(@RequestBody UserUpdate userUpdate) {
         var currentUser = userService.getCurrentUser();
         userAssembler.copyToEntity(userUpdate, currentUser);
-        return userAssembler.toResponse(userService.save(currentUser));
+        return userAssembler.toResponse(userService.save(currentUser, currentUser.getProfile()));
     }
 
 

@@ -14,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ProfileService {
 
+    private final String DEFAULT_IMAGE_URL = "https://api.realworld.io/images/smiley-cyrus.jpeg";
+
+
     private final ProfileRepository profileRepository;
     private final UserRepository userRepository;
 
@@ -28,28 +31,27 @@ public class ProfileService {
     }
 
     @Transactional
-    public void save(User user) {
-        var profile = profileRepository.findById(user.getId());
+    public void save(Profile profile) {
 
-        if (profile.isEmpty()) {
-            var newProfile = Profile
-                    .builder()
-                    .user(user)
-                    .username(user.getUsername())
-                    .bio(user.getBio())
-                    .image(user.getImage())
-                    .build();
+        profile.setBio(profile.getBio());
+        profile.setUsername(profile.getUsername());
+        profile.setImage(profile.getImage());
 
-            profileRepository.save(newProfile);
-            return;
-        }
+        profileRepository.save(profile);
+    }
 
-        var existingProfile = profile.get();
-        existingProfile.setBio(user.getBio());
-        existingProfile.setUsername(user.getUsername());
-        existingProfile.setImage(user.getImage());
+    public Profile createNewProfile(User user, String username) {
+        return Profile
+                .builder()
+                .user(user)
+                .username(username)
+                .bio(null)
+                .image(DEFAULT_IMAGE_URL)
+                .build();
+    }
 
-        profileRepository.save(existingProfile);
+    public Profile updateProfile() {
+        return new Profile();
     }
 
     @Transactional

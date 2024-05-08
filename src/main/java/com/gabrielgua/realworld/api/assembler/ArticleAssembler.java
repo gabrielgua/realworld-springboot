@@ -33,13 +33,11 @@ public class ArticleAssembler {
     public ArticleResponse toResponse(Profile profile, Article article) {
         var response = toResponse(article);
 
-        if (profile.getProfiles().contains(article.getAuthor())) {
-            response.getAuthor().setFollowing(true);
-        }
+        var isFollowingProfile = profile.getProfiles().contains(article.getAuthor());
+        response.getAuthor().setFollowing(isFollowingProfile);
 
-        if (article.getFavorites().contains(profile)) {
-            response.setFavorited(true);
-        }
+        var isArticleFavorited = article.getFavorites().contains(profile);
+        response.setFavorited(isArticleFavorited);
 
         return response;
     }

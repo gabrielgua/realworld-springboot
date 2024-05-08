@@ -21,9 +21,9 @@ public class ProfileAssembler {
     public ProfileResponse toResponse(Profile current, Profile profile) {
         var response = modelMapper.map(profile, ProfileResponse.class);
 
-        if (current.getProfiles().contains(profile)) {
-            response.setFollowing(true);
-        }
+        var isFollowing = current.getProfiles().contains(profile);
+        response.setFollowing(isFollowing);
+
         return response;
     }
 }

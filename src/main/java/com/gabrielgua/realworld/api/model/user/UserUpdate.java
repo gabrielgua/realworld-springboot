@@ -1,5 +1,6 @@
 package com.gabrielgua.realworld.api.model.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.gabrielgua.realworld.api.model.BaseResponse;
@@ -24,8 +25,19 @@ public class UserUpdate extends BaseResponse {
     private String username;
 
     @Nullable
-    private String password;
+    private String image;
 
     @Nullable
-    private String image;
+    private String password;
+
 }
+
+
+
+
+
+
+
+
+
+

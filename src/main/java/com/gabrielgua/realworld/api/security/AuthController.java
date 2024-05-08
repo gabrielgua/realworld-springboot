@@ -4,6 +4,7 @@ import com.gabrielgua.realworld.api.assembler.UserAssembler;
 import com.gabrielgua.realworld.api.model.user.UserAuthenticate;
 import com.gabrielgua.realworld.api.model.user.UserRegister;
 import com.gabrielgua.realworld.api.model.user.UserResponse;
+import com.gabrielgua.realworld.domain.service.ProfileService;
 import com.gabrielgua.realworld.domain.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +22,14 @@ public class AuthController {
     private final UserService userService;
     private final AuthService authService;
     private final UserAssembler userAssembler;
+    private final ProfileService profileService;
 
     @PostMapping
     public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRegister register) {
         var user = userAssembler.toEntity(register);
-        return ResponseEntity.ok(authService.register(userService.save(user)));
+        var profile = profileService.createNewProfile(user, register.getUsername());
+
+        return ResponseEntity.ok(authService.register(userService.save(user, profile)));
     }
 
     @PostMapping("/login")
