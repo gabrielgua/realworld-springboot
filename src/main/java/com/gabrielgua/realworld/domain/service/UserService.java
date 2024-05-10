@@ -29,10 +29,8 @@ public class UserService {
         return getByEmail(authUtils.getCurrentUserEmail());
     }
 
-
     @Transactional(readOnly = true)
     public User getByEmail(String email) {
-        System.out.println(email);
         return userRepository.findByEmail(email).orElseThrow(EmailNotFoundException::new);
     }
 

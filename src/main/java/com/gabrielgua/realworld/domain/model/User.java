@@ -1,14 +1,16 @@
 package com.gabrielgua.realworld.domain.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {

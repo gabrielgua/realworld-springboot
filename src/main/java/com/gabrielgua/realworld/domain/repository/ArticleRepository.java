@@ -14,8 +14,6 @@ import java.util.Optional;
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpecificationExecutor<Article> {
     Optional<Article> findBySlug(String slug);
-
-    boolean existsBySlug(String slug);
     List<Article> findAllByAuthorIn(List<User> users, Pageable pageable);
 
 }
