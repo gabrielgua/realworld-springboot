@@ -23,27 +23,18 @@ import static org.mockito.Mockito.*;
 
 class UserServiceTest {
 
-    @Mock
-    private UserRepository userRepository;
+    @Mock private EntityManager entityManager;
+    @Mock private ProfileService profileService;
+    @Mock private PasswordEncoder passwordEncoder;
+    @Mock private UserRepository userRepository;
+    @Mock private ProfileRepository profileRepository;
 
-    @Mock
-    private ProfileRepository profileRepository;
-
-    @Mock
-    private EntityManager entityManager;
-
-    @Mock
-    private PasswordEncoder passwordEncoder;
-
-    @Mock
-    private ProfileService profileService;
 
     @InjectMocks
     private UserService userService;
 
     private User user;
     private Profile profile;
-
     private User registerUser;
     private Profile registerProfile;
 
@@ -55,7 +46,7 @@ class UserServiceTest {
         profile = Profile.builder()
                 .id(1L)
                 .image("https://example.com/my-cool-image.png")
-                .bio("I'm writing tests right now.")
+                .bio(null)
                 .user(user)
                 .username("test")
                 .build();
@@ -119,12 +110,14 @@ class UserServiceTest {
         assertThat(savedUser.getToken()).startsWith("Token ");
         assertThat(savedUser.getEmail()).isEqualTo(user.getEmail());
 
+        assertThat(savedUser.getProfile().getBio()).isNull();
+        assertThat(savedUser.getProfile().getId()).isEqualTo((user.getId()));
         assertThat(savedUser.getProfile().getUsername()).isEqualTo(profile.getUsername());
+        assertThat(savedUser.getProfile().getImage()).isEqualTo(profile.getImage());
     }
 
     @Test
     public void should_throw_EmailTakenException_when_saving_user_with_duplicate_email() {
-
         when(userRepository.findByEmail(any(String.class))).thenReturn(Optional.ofNullable(user));
 
         assertThatExceptionOfType(EmailTakenException.class)
@@ -140,31 +133,4 @@ class UserServiceTest {
                 .isThrownBy(() -> userService.save(registerUser, registerProfile))
                 .withMessage("has already been taken");
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
