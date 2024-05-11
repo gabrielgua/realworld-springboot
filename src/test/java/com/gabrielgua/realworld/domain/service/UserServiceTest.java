@@ -75,10 +75,9 @@ class UserServiceTest {
 
     @Test
     public void should_get_user_by_email_successfully() {
-        var email = "test@email.com";
-        when(userRepository.findByEmail(email)).thenReturn(Optional.ofNullable(user));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.ofNullable(user));
 
-        var userOptional = userService.getByEmail(email);
+        var userOptional = userService.getByEmail("test@email.com");
 
         assertThat(userOptional).isNotNull();
         assertThat(userOptional.getEmail()).isEqualTo(user.getEmail());
@@ -87,11 +86,10 @@ class UserServiceTest {
 
     @Test
     public void should_throw_EmailNotFoundException_when_email_not_found() {
-        var email = "thisemail@doesnt.exist.com";
-        when(userRepository.findByEmail(email)).thenThrow(EmailNotFoundException.class);
+        when(userRepository.findByEmail(anyString())).thenThrow(EmailNotFoundException.class);
 
         assertThatExceptionOfType(EmailNotFoundException.class)
-                .isThrownBy(() -> userService.getByEmail(email));
+                .isThrownBy(() -> userService.getByEmail("thisemail@doesnt.exist.com"));
     }
 
     @Test
