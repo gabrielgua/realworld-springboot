@@ -18,7 +18,7 @@ public class CommentService {
     private final CommentRepository repository;
 
     public List<Comment> getAllByArticle(Article article) {
-        return article.getComments().stream().toList();
+        return repository.findAllByArticle(article);
     }
 
     @Transactional

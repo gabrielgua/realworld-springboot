@@ -1,8 +1,7 @@
 package com.gabrielgua.realworld.domain.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +9,9 @@ import java.time.OffsetDateTime;
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "comments")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Comment {
