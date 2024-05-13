@@ -37,7 +37,7 @@ public class ArticleService {
 
     @Transactional(readOnly = true)
     public List<Article> getFeedByUser(Profile profile, Pageable pageable) {
-        List<User> followedUsers = profile.getProfiles().stream().map(Profile::getUser).toList();
+        List<Profile> followedUsers = profile.getProfiles().stream().toList();
 
         return repository.findAllByAuthorIn(followedUsers, pageable);
     }
@@ -54,7 +54,6 @@ public class ArticleService {
         var slug = slg.slugify(article.getTitle());
         checkSlugAvailability(slug, article);
         article.setSlug(slug);
-
 
         return repository.save(article);
     }

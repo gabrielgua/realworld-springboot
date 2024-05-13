@@ -1,6 +1,7 @@
 package com.gabrielgua.realworld.domain.repository;
 
 import com.gabrielgua.realworld.domain.model.Article;
+import com.gabrielgua.realworld.domain.model.Profile;
 import com.gabrielgua.realworld.domain.model.Tag;
 import com.gabrielgua.realworld.domain.model.User;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,6 @@ import java.util.Optional;
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long>, JpaSpecificationExecutor<Article> {
     Optional<Article> findBySlug(String slug);
-    List<Article> findAllByAuthorIn(List<User> users, Pageable pageable);
+    List<Article> findAllByAuthorIn(List<Profile> profiles, Pageable pageable);
 
 }
