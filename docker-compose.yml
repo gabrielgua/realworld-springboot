@@ -1,0 +1,29 @@
+version: "3.9"
+
+networks:
+  realworld-network:
+    driver: bridge
+
+services:
+  realworld-mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+    ports:
+      - "3308:3306"
+    networks:
+      - realworld-network
+
+  realworld-api:
+    image: gabrielgua/realworld:latest
+    command: ["/wait-for-it.sh", "realworld-mysql:3306", "-t", "30", "--", "java", "-jar", "realworld.jar"]
+    environment:
+      SPRING_PROFILE: "dev"
+      DB_HOST: realworld-mysql
+      TOKEN_SECRET: "thisIsNotAStrongSecretAlsoHardCodingASecretInADockerComposeFileIsNotRecommended"
+    ports:
+      - "8080:8080"
+    networks:
+      - realworld-network
+    depends_on:
+      - realworld-mysql

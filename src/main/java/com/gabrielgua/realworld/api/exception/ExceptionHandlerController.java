@@ -114,7 +114,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ArticleNotUniqueException.class)
-    public ResponseEntity<?> handleArticleAlreadyRegistered(ArticleNotUniqueException ex, WebRequest request) {
+    public ResponseEntity<?> handleArticleNotUnique(ArticleNotUniqueException ex, WebRequest request) {
         var status = HttpStatus.UNPROCESSABLE_ENTITY;
         var message = ex.getMessage();
 

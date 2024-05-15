@@ -18,6 +18,8 @@
 		<jjwt.version>0.11.5</jjwt.version>
 		<modelmapper.version>3.1.1</modelmapper.version>
 		<slugify.version>3.0.3</slugify.version>
+		<dockerfile-maven.version>1.4.13</dockerfile-maven.version>
+		<specification-arg-resolver.version>3.1.0</specification-arg-resolver.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -94,7 +96,7 @@
 		<dependency>
 			<groupId>net.kaczmarzyk</groupId>
 			<artifactId>specification-arg-resolver</artifactId>
-			<version>3.1.0</version>
+			<version>${specification-arg-resolver.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -114,5 +116,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
